@@ -1,7 +1,0 @@
-require_relative './hash/printer.rb'
-require_relative './hash/printer/config.rb'
-require_relative './hash/printer/env_progress.rb'
-require_relative './hash/printer/env_result.rb'
-require_relative './hash/printer/mutation_result.rb'
-require_relative './hash/printer/subject_result.rb'
-require_relative './hash/printer/test_result.rb'
