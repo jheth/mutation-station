@@ -14,6 +14,7 @@ gem 'devise'
 gem 'high_voltage', '~> 2.4.0'
 gem 'faker'
 gem 'omniauth-github'
+gem 'delayed_job_active_record'
 
 group :production do
   gem 'rails_12factor'
