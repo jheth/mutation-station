@@ -2,9 +2,10 @@ class Build < ActiveRecord::Base
   belongs_to :repository
   belongs_to :user
 
-  store_accessor :result, [:env_progress, :failed_subject_results, :success_subject_results]
+  store_accessor :result, [:env_progress, :failed_subject_results,
+                           :success_subject_results]
 
-  def self.perform(repository_id, user_id, filter, branch='master')
+  def self.perform(repository_id, user_id, filter, branch = 'master')
     repository = Repository.find(repository_id)
     user = User.find(user_id)
 
@@ -21,10 +22,10 @@ class Build < ActiveRecord::Base
     stdout_file = Tempfile.new([current_sha, '.txt'])
 
     gemfile = File.join(wd, 'Gemfile')
-    unless system("grep -q mutant-rspec Gemfile")
-      File.open(gemfile, 'a') {|f|
-        f.write(%Q{gem "mutant-rspec", github: "jheth/mutant", branch: 'json-output-reporter'})
-      }
+    unless system('grep -q mutant-rspec Gemfile')
+      File.open(gemfile, 'a') do|f|
+        f.write(%(gem "mutant-rspec", github: "jheth/mutant", branch: 'json-output-reporter'))
+      end
     end
 
     Bundler.with_clean_env do
@@ -38,9 +39,8 @@ class Build < ActiveRecord::Base
         user: user,
         last_sha: current_sha,
         result: JSON.parse(File.read(result_json.path)),
-        stdout: File.read(stdout_file.path)
+        stdout: File.read(stdout_file.path),
       )
     end
   end
-
 end

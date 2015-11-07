@@ -3,7 +3,7 @@ class BuildsController < ApplicationController
   before_filter :load_repository
 
   def create
-    filter = "Rumble*"
+    filter = 'Rumble*'
     branch = 'master'
 
     Build.delay.perform(@repo.id, current_user.id, filter, branch)

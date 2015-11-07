@@ -1,6 +1,4 @@
 class Repository < ActiveRecord::Base
-  before_validation :set_github_details
-
   belongs_to :user
   has_many :builds
 
@@ -17,13 +15,13 @@ class Repository < ActiveRecord::Base
   end
 
   def working_directory
-    cwd = File.join(WORKING_DIR, self.name)
-    unless Dir.exists?(cwd)
+    cwd = File.join(WORKING_DIR, name)
+    unless Dir.exist?(cwd)
       FileUtils.mkdir_p(cwd)
 
       Dir.chdir(cwd) do
-        puts "Cloning repository into..."
-        response = `git clone #{self.clone_url} .`
+        puts 'Cloning repository into...'
+        response = `git clone #{clone_url} .`
         puts response
       end
     end
@@ -31,7 +29,7 @@ class Repository < ActiveRecord::Base
     cwd
   end
 
-  def has_specs?
+  def specs?
     spec_list.any?
   end
 
@@ -40,27 +38,24 @@ class Repository < ActiveRecord::Base
 
     filepath = working_directory
     if File.directory?(File.join(filepath, 'spec'))
-      @spec_list = Dir.glob(File.join(filepath, "spec/**/*.rb")).select{|x|
-        x.exclude?('factories') && x.exclude?('rails_helper.rb') && x.exclude?('spec_helper.rb')
-      }
+      excluded_files = ['factories', 'rails_helper.rb', 'spec_helper.rb']
+      @spec_list = Dir.glob(File.join(filepath, 'spec/**/*.rb')).reject do |x|
+        excluded_files.any? { |f| x.include?(f) }
+      end
     end
 
     @spec_list
   end
 
-  private
-
   def set_github_details
-    begin
-      gh = github_repo
+    gh = github_repo
 
-      attributes = {
-        clone_url: gh.clone_url,
-      }
+    attributes = {
+      clone_url: gh.clone_url,
+    }
 
-      assign_attributes(attributes)
-    rescue Octokit::NotFound
-      errors.add(:repository, 'cannot be located on GitHub.')
-    end
+    assign_attributes(attributes)
+  rescue Octokit::NotFound
+    errors.add(:repository, 'cannot be located on GitHub.')
   end
 end

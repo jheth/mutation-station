@@ -29,8 +29,10 @@ Style/TrailingComma:
 Style/WordArray:
   Enabled: false
 Metrics/MethodLength:
-  Max: 15
+  Max: 100
 Style/ClassAndModuleChildren:
   Enabled: false
 Style/GuardClause:
+  Enabled: false
+Metrics/AbcSize:
   Enabled: false
