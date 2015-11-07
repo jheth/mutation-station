@@ -11,6 +11,9 @@ class User < ActiveRecord::Base
       user.email = auth.info.email
       user.password = Devise.friendly_token[0, 20]
       user.name = auth.info.name
+      user.github_avatar_url = auth.extra.raw_info.avatar_url
+      user.github_username = auth.info.nickname
+      user.github_access_token = auth.credentials.token
     end
   end
 end
