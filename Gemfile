@@ -17,6 +17,7 @@ gem 'omniauth-github'
 gem 'delayed_job_active_record'
 gem 'puma'
 gem 'octokit', '~> 4.0'
+gem 'slim'
 
 group :production do
   gem 'rails_12factor'
