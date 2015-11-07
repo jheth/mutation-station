@@ -25,6 +25,7 @@ group :production do
 end
 
 group :development, :test do
+gem 'pry-rails'
   gem 'byebug'
   gem 'pry-byebug'
   gem 'rspec-rails', '~> 3.0'
