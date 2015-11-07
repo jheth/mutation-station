@@ -47,8 +47,10 @@ textarea rows="40" cols="90"
   = @build.stdout
 
 javascript:
-  $('.editor').each(function( index ) {
-    editor = ace.edit(this);
-    editor.setTheme("ace/theme/monokai");
-    editor.getSession().setMode("ace/mode/ruby");
+  $(document).ready(function() {
+    $('.editor').each(function( index ) {
+      editor = ace.edit(this);
+      editor.setTheme("ace/theme/monokai");
+      editor.getSession().setMode("ace/mode/ruby");
+    });
   });
