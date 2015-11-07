@@ -15,3 +15,5 @@
 # Ignore .env files.
 .env
 .env.*
+
+vendor/bundle

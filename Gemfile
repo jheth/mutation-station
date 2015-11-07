@@ -19,6 +19,8 @@ gem 'puma'
 gem 'octokit', '~> 4.0'
 gem 'slim'
 
+gem 'mutant-rspec'
+
 group :production do
   gem 'rails_12factor'
 end
