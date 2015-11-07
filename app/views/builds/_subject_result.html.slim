@@ -1,0 +1,10 @@
+h2 = result['identification']
+ul.tests-executed
+  - result['tests'].each do |name|
+    li = name
+
+div.test-result
+  - result['mutation_result'].each do |mutation|
+    label #{mutation['identification']}
+    div.editor
+      = mutation['details']

@@ -11,5 +11,5 @@
   - current_user.repositories.each do |repository|
     .panel.panel-default
       .panel-body
-        = link_to
+        = link_to [repository.user, repository] do
           h4 = repository.name

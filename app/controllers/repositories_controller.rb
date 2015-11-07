@@ -11,6 +11,14 @@ class RepositoriesController < ApplicationController
     redirect_to root_path
   end
 
+  def show
+    @repo = Repository.find(params[:id])
+    #@gh_repo = @repo.github_repo
+    @builds = @repo.builds
+
+    @spec_list = @repo.spec_list
+  end
+
   private
 
   def repository_params

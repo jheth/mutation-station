@@ -16,11 +16,12 @@
 .env
 .env.*
 
-vendor/bundle
-
 /coverage/
 
 # Vagrant stuff
 /Vagrantfile
 /.vagrant/
 /salt/
+=======
+/vendor/bundle
+/vendor/ruby

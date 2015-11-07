@@ -20,7 +20,6 @@ gem 'puma'
 gem 'octokit', '~> 4.0'
 gem 'slim'
 
-gem 'mutant-rspec'
 
 group :production do
   gem 'rails_12factor'
@@ -28,6 +27,7 @@ end
 
 group :development, :test do
   gem 'byebug'
+  gem 'pry-byebug'
   gem 'rspec-rails', '~> 3.0'
   gem 'factory_girl_rails'
   gem 'dotenv-rails'
@@ -43,4 +43,5 @@ end
 group :test do
   gem 'shoulda-matchers', '~> 3.0'
   gem 'simplecov', :require => false
+  gem 'mutant-rspec', github: 'jheth/mutant', branch: 'json-output-reporter'
 end

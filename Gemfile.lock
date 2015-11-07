@@ -1,3 +1,27 @@
+GIT
+  remote: git://github.com/jheth/mutant.git
+  revision: b63951d4e93e0f5acbfb5ed0577a5c705a74c65a
+  branch: json-output-reporter
+  specs:
+    mutant (0.8.7)
+      abstract_type (~> 0.0.7)
+      adamantium (~> 0.2.0)
+      anima (~> 0.3.0)
+      ast (~> 2.1)
+      concord (~> 0.1.5)
+      diff-lcs (~> 1.2)
+      equalizer (~> 0.0.9)
+      ice_nine (~> 0.11.1)
+      memoizable (~> 0.4.2)
+      morpher (~> 0.2.5)
+      parallel (~> 1.3)
+      parser (~> 2.2.2)
+      procto (~> 0.0.2)
+      unparser (~> 0.2.4)
+    mutant-rspec (0.8.7)
+      mutant (~> 0.8.7)
+      rspec-core (>= 3.2.0, < 3.4.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -139,24 +163,6 @@ GEM
     multi_json (1.11.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
-    mutant (0.8.7)
-      abstract_type (~> 0.0.7)
-      adamantium (~> 0.2.0)
-      anima (~> 0.3.0)
-      ast (~> 2.1)
-      concord (~> 0.1.5)
-      diff-lcs (~> 1.2)
-      equalizer (~> 0.0.9)
-      ice_nine (~> 0.11.1)
-      memoizable (~> 0.4.2)
-      morpher (~> 0.2.5)
-      parallel (~> 1.3)
-      parser (~> 2.2.2)
-      procto (~> 0.0.2)
-      unparser (~> 0.2.4)
-    mutant-rspec (0.8.2)
-      mutant (~> 0.8.2)
-      rspec-core (>= 3.2.0, < 3.4.0)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
     oauth2 (1.0.0)
@@ -186,6 +192,9 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-byebug (3.3.0)
+      byebug (~> 8.0)
+      pry (~> 0.10)
     pry-rails (0.3.4)
       pry (>= 0.9.10)
     puma (2.15.3)
@@ -316,10 +325,11 @@ DEPENDENCIES
   high_voltage (~> 2.4.0)
   jbuilder (~> 2.0)
   jquery-rails
-  mutant-rspec
+  mutant-rspec!
   octokit (~> 4.0)
   omniauth-github
   pg
+  pry-byebug
   pry-rails
   puma
   rails (= 4.2.4)

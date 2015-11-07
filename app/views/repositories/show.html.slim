@@ -1,0 +1,21 @@
+h2 = @repo.name
+h4 = @repo.clone_url
+
+h2 Tests
+ul.spec-list
+  - @spec_list.each do |spec_file|
+    li = spec_file
+
+= form_for([@repo, Build.new], url: repository_builds_path(@repo), remote: true) do |f|
+  = f.submit "Build Now", class: "btn btn-primary"
+
+h2 Builds
+ul.builds
+  - @builds.each do |build|
+    .row
+      .col-md-4
+        = link_to(build.id, repository_build_path(build.repository, build))
+      .col-md-4
+        | #{build.created_at}
+      .col-md-4
+        | #{build.last_sha}

@@ -1,0 +1,54 @@
+script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/ace.js" type="text/javascript" charset="utf-8"
+
+- env_progress = @result_data['env_progress']
+- config = env_progress['config']
+
+h2 Tests
+ul.spec-list
+  - @spec_list.each do |spec_file|
+    li = spec_file
+
+h2 Last Execution
+
+h4 You have #{env_progress["alive"]} undead mutants!
+
+label Configuration
+
+- ['matcher', 'integration', 'expect_coverage', 'jobs', 'includes'].each do |key|
+  .row
+    .col-md-4
+      | #{key.titleize}
+    .col-md-4
+      | #{config[key]}
+
+label Results
+
+- ['coverage', 'expected', 'kills', 'killtime', 'mutations', 'overhead',
+  'runtime', 'subjects'].each do |key|
+  .row
+    .col-md-4
+      = key.titleize
+    .col-md-4
+      = env_progress[key]
+
+
+h3 Failed
+
+- @result_data['failed_subject_results'].each do |result|
+  = render "subject_result", result: result
+
+h3 Success
+
+- @result_data['success_subject_results'].each do |result|
+  = render "subject_result", result: result
+
+h3 Standard Out
+textarea rows="40" cols="90"
+  = @build.stdout
+
+javascript:
+  $('.editor').each(function( index ) {
+    editor = ace.edit(this);
+    editor.setTheme("ace/theme/monokai");
+    editor.getSession().setMode("ace/mode/ruby");
+  });
