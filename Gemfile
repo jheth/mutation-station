@@ -16,6 +16,7 @@ gem 'faker'
 gem 'omniauth-github'
 gem 'delayed_job_active_record'
 gem 'puma'
+gem 'octokit', '~> 4.0'
 
 group :production do
   gem 'rails_12factor'
