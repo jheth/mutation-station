@@ -13,6 +13,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'devise'
 gem 'high_voltage', '~> 2.4.0'
 gem 'faker'
+gem 'omniauth-github'
 
 group :development, :test do
   gem 'byebug'

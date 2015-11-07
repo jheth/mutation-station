@@ -1,5 +1,12 @@
 Rails.application.routes.draw do
-  devise_for :users, skip: ['passwords', 'sessions', 'registrations']
+  devise_for :users, controllers: {
+    omniauth_callbacks: 'users/omniauth_callbacks',
+  }, skip: ['passwords', 'sessions', 'registrations']
+
+  devise_scope :user do
+    delete '/users/log_out', to: 'devise/sessions#destroy',
+                             as: :destroy_user_session
+  end
 
   root 'high_voltage/pages#show', id: 'home'
 
