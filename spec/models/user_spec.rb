@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+  it { should have_many(:repositories) }
+
   it { should validate_presence_of(:name) }
 
   describe '.from_omniauth' do
