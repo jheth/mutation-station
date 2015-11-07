@@ -1,0 +1,15 @@
+= render partial: "repositories/add_new_modal"
+.page-header
+  a.btn.btn-default.pull-right[type="button" data-toggle="modal" data-target="#addNewRepoModal"]
+    => icon("plus")
+    | Add Open Source Repo
+  h3
+    => icon("github")
+    ' Repositories
+    small Open Source
+.page-content
+  - current_user.repositories.each do |repository|
+    .panel.panel-default
+      .panel-body
+        = link_to
+          h4 = repository.name

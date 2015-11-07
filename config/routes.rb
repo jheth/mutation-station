@@ -8,6 +8,10 @@ Rails.application.routes.draw do
                              as: :destroy_user_session
   end
 
+  authenticated :user do
+    root 'dashboard#show', as: :authenticated_user
+  end
+
   root 'high_voltage/pages#show', id: 'home'
 
   authenticated :user do
