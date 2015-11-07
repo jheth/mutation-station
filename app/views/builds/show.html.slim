@@ -3,12 +3,7 @@ script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/ace.js" type="text/
 - env_progress = @result_data['env_progress']
 - config = env_progress['config']
 
-h2 Tests
-ul.spec-list
-  - @spec_list.each do |spec_file|
-    li = spec_file
-
-h2 Last Execution
+h2 Build ##{@build.id}
 
 h4 You have #{env_progress["alive"]} undead mutants!
 
@@ -52,5 +47,6 @@ javascript:
       editor = ace.edit(this);
       editor.setTheme("ace/theme/monokai");
       editor.getSession().setMode("ace/mode/ruby");
+      editor.setReadOnly(true);
     });
   });

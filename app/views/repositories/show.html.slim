@@ -2,11 +2,15 @@ h2 = @repo.name
 h4 = @repo.clone_url
 
 h2 Tests
-ul.spec-list
-  - @spec_list.each do |spec_file|
-    li = spec_file
 
 = form_for([@repo, Build.new], url: repository_builds_path(@repo), remote: true) do |f|
+
+  ul.spec-list
+    - @spec_list.each do |spec_file|
+      div.checkbox
+        label
+          input type="checkbox" name="specs[]" value="#{spec_file}" = spec_file
+
   = f.submit "Build Now", class: "btn btn-primary"
 
 h2 Builds

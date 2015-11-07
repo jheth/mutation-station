@@ -37,8 +37,10 @@ class Repository < ActiveRecord::Base
     filepath = working_directory
     if File.directory?(File.join(filepath, 'spec'))
       excluded_files = ['factories', 'rails_helper.rb', 'spec_helper.rb']
-      @spec_list = Dir.glob(File.join(filepath, 'spec/**/*.rb')).reject do |x|
-        excluded_files.any? { |f| x.include?(f) }
+      Dir.chdir(filepath) do
+        @spec_list = Dir.glob('spec/**/*.rb').reject do |x|
+          excluded_files.any? { |f| x.include?(f) }
+        end
       end
     end
 

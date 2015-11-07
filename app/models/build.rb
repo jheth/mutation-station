@@ -31,7 +31,7 @@ class Build < ActiveRecord::Base
       ENV['BUNDLE_GEMFILE']=gemfile
       ENV['BUNDLE_FROZEN']='0'
       puts `bundle install --path=vendor`
-      puts `bundle exec mutant --include lib/ --json-dump "#{result_json.path}" --use rspec #{filter} > "#{stdout_file.path}"`
+      puts `bundle exec mutant --include lib/ --json-dump "#{result_json.path}" --use rspec #{filter.join(' ')} > "#{stdout_file.path}"`
     end
 
     if File.exist?(result_json) && File.size(stdout_file.path) > 0

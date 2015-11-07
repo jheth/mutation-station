@@ -3,7 +3,19 @@ class BuildsController < ApplicationController
   before_filter :load_repository
 
   def create
-    filter = 'Rumble*'
+    filter = []
+    if params['specs'].is_a?(Array)
+      filter = params['specs'].map do |s|
+        if matches = s.match(/spec\/lib\/([\w\/]*)_spec.rb/)
+          matches[1].split('/').map {|x|
+            x.camelize
+          }.join('::')
+        else
+          nil
+        end
+      end.compact
+    end
+
     branch = 'master'
 
     Build.delay.perform(@repo.id, current_user.id, filter, branch)

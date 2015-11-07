@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.2.3'
+#ruby '2.2.3'
 gem 'rails', '4.2.4'
 gem 'pg'
 gem 'bootstrap-sass', '~> 3.3.5'
@@ -25,7 +25,6 @@ group :production do
 end
 
 group :development, :test do
-gem 'pry-rails'
   gem 'byebug'
   gem 'pry-byebug'
   gem 'rspec-rails', '~> 3.0'
@@ -33,6 +32,7 @@ gem 'pry-rails'
   gem 'dotenv-rails'
   gem 'binding_of_caller'
   gem 'pry-rails'
+  gem 'awesome_print'
 end
 
 group :development do
