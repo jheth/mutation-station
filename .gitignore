@@ -19,3 +19,8 @@
 vendor/bundle
 
 /coverage/
+
+# Vagrant stuff
+/Vagrantfile
+/.vagrant/
+/salt/
