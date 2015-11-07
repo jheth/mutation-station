@@ -15,6 +15,10 @@ gem 'high_voltage', '~> 2.4.0'
 gem 'faker'
 gem 'omniauth-github'
 
+group :production do
+  gem 'rails_12factor'
+end
+
 group :development, :test do
   gem 'byebug'
   gem 'rspec-rails', '~> 3.0'
