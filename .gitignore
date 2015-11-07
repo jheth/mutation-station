@@ -17,3 +17,5 @@
 .env.*
 
 vendor/bundle
+
+/coverage/
