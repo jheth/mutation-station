@@ -1,0 +1,36 @@
+AllCops:
+  Include:
+    - '**/*.gemspec'
+    - '**/*.jbuilder'
+    - '**/*.opal'
+    - '**/*.podspec'
+    - '**/*.rake'
+    - '**/Berksfile'
+    - '**/Capfile'
+    - '**/Cheffile'
+    - '**/Gemfile'
+    - '**/Guardfile'
+    - '**/Podfile'
+    - '**/Rakefile'
+    - '**/Thorfile'
+    - '**/Vagabondfile'
+    - '**/Vagrantfile'
+  Exclude:
+    - 'bin/**/*'
+    - 'db/schema.rb'
+    - 'log/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+  DisplayCopNames: true
+Documentation:
+  Enabled: false
+Style/TrailingComma:
+  EnforcedStyleForMultiline: comma
+Style/WordArray:
+  Enabled: false
+Metrics/MethodLength:
+  Max: 15
+Style/ClassAndModuleChildren:
+  Enabled: false
+Style/GuardClause:
+  Enabled: false
