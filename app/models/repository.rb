@@ -4,8 +4,6 @@ class Repository < ActiveRecord::Base
 
   validates :name, :clone_url, presence: true
 
-  WORKING_DIR = '/tmp'
-
   def github_repo
     id = ENV.fetch('GITHUB_CLIENT_ID')
     secret = ENV.fetch('GITHUB_CLIENT_SECRET')
@@ -15,7 +13,7 @@ class Repository < ActiveRecord::Base
   end
 
   def working_directory
-    cwd = File.join(WORKING_DIR, name)
+    cwd = Rails.root.join('tmp', name)
     unless Dir.exist?(cwd)
       FileUtils.mkdir_p(cwd)
 
