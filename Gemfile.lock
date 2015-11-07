@@ -67,6 +67,7 @@ GEM
       railties (>= 3.0.0)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
+    high_voltage (2.4.0)
     i18n (0.7.0)
     jbuilder (2.3.2)
       activesupport (>= 3.0.0, < 5)
@@ -180,6 +181,7 @@ DEPENDENCIES
   byebug
   devise
   factory_girl_rails
+  high_voltage (~> 2.4.0)
   jbuilder (~> 2.0)
   jquery-rails
   pg
