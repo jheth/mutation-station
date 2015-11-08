@@ -25,8 +25,17 @@ class Repository < ActiveRecord::Base
     self.clone_url.gsub('.git', '')
   end
 
-  def working_directory
-    Rails.root.join('tmp', name)
+  def working_directory(delay: true)
+    cwd = Rails.root.join('tmp', name)
+    unless (Dir.exist?(cwd) && Dir.exist?(File.join(cwd, '.git')))
+      self.update_attributes(clone_status: QUEUED)
+      if delay
+        self.delay.clone
+      else
+        self.clone
+      end
+    end
+    cwd
   end
 
   def cloned?

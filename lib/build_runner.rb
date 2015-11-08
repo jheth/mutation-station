@@ -6,7 +6,8 @@ class BuildRunner
 
     @build.send_progress_status(status: Build::RUNNING, message: 'Build Started...')
 
-    working_dir = repository.working_directory
+    # Make sure we have the repo
+    working_dir = repository.working_directory(delay: false)
     Dir.chdir(working_dir)
 
     @build.send_progress_status(message: 'Pulling latest changes from github.')

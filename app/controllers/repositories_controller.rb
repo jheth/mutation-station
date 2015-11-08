@@ -13,7 +13,6 @@ class RepositoriesController < ApplicationController
       flash[:error] = @repository.errors.full_messages.first
       redirect_to root_path
     end
-
   end
 
   def show
