@@ -39,6 +39,7 @@ class BuildRunner
           File.open(gemfile, 'a') do |f|
             f.write("\n" + mutant_gem)
           end
+          log(`git diff #{gemfile}`)
           bundle_install(filter: 'mutant')
         end
 
