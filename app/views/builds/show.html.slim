@@ -1,12 +1,13 @@
 script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/ace.js" type="text/javascript" charset="utf-8"
 
 
-h2 Build ##{@build.id}
+.report-header
+  h2 Build ##{@build.id}
 
-- if @result_data.is_a?(Hash)
-  - env_progress = @result_data['env_progress']
-  - config = env_progress['config']
-  h4 You have #{env_progress["alive"]} undead mutants!
+  - if @result_data.is_a?(Hash)
+    - env_progress = @result_data['env_progress']
+    - config = env_progress['config']
+    h4 You have #{env_progress["alive"]} undead mutants!
 
 .bs-component
   ul.nav.nav-tabs

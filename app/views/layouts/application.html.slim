@@ -10,7 +10,7 @@ html
   body class="#{controller_name} #{action_name} #{controller_name == 'pages' && action_name == 'show' ? 'gradient' : nil}"
     - unless controller_name == "pages"
       = render "layouts/nav"
-      .container
+      .container.mutation
         = yield
     - else
       = yield
