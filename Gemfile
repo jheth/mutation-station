@@ -1,6 +1,11 @@
 source 'https://rubygems.org'
 
-#ruby '2.2.3'
+source 'https://rails-assets.org' do
+  gem 'rails-assets-typehead.js'
+end
+
+ruby '2.2.3'
+
 gem 'rails', '4.2.4'
 gem 'pg'
 gem 'bootstrap-sass', '~> 3.3.5'
