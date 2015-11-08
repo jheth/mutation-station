@@ -44,6 +44,12 @@ class BuildRunner
   rescue => e
     puts e.message
     puts e.backtrace.join('\n')
+
+    @build.update_attributes({
+      status: Build::ERROR,
+      last_sha: current_sha,
+      build_log: File.read(build_log)
+    })
   end
 
   def build_log
