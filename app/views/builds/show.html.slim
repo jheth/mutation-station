@@ -1,5 +1,3 @@
-
-
 .report-header
   h2 Build ##{@build.id}
 
@@ -60,14 +58,14 @@
           .col-md-4 Expected
           .col-md-4 = ("%0.2f%%" % env_progress['expected'])
 
-        h3 Failures
+        label Failures
         - if @result_data['failed_subject_results'].any?
           - @result_data['failed_subject_results'].each do |result|
             = render "subject_result", result: result
         - else
           | Wow. This hasn't happened before. I'm speechless.
 
-        h3 Success
+        label Success
         - if @result_data['success_subject_results'].any?
           | You won this time. Good game.
           - @result_data['success_subject_results'].each do |result|

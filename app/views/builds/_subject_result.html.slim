@@ -10,6 +10,6 @@ div.test-result
   - result['mutation_result'].each do |mutation|
     - r_test_name, r_file = mutation['identification'].split(":/")
     - r_source = r_file.gsub(@repo.working_directory.to_s[1..-1], '')
-    label #{r_test_name} - #{r_source}
+    label.editor-title #{r_test_name} - #{r_source}
     div.editor
       = mutation['details']
