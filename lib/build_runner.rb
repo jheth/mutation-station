@@ -26,7 +26,9 @@ class BuildRunner
     gemfile = File.join(working_dir, 'Gemfile')
     unless system('grep -q mutant-rspec Gemfile')
       File.open(gemfile, 'a') do |f|
-        f.write(mutant_gem)
+        # Write a line in case there is something on the last line in
+        # the Gemfile
+        f.write("\n" + mutant_gem)
       end
     end
 
