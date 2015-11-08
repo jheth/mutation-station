@@ -55,5 +55,4 @@ end
 group :test do
   gem 'shoulda-matchers', '~> 3.0'
   gem 'simplecov', require: false
-  gem 'mutant-rspec', github: 'jheth/mutant', branch: 'json-output-reporter'
 end
