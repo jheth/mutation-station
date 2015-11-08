@@ -1,5 +1,5 @@
 class BuildRunner
-  def perform(build_id, filter, branch = 'master')
+  def perform(build_id: nil, filter: filter, branch: 'master', fail_fast: false)
     @build = Build.find(build_id)
     repository = @build.repository
     @build.update_attributes(status: Build::RUNNING)
@@ -11,7 +11,7 @@ class BuildRunner
 
     @build.send_progress_status(message: 'Pulling latest changes from github.')
 
-    git_reset
+    git_reset(branch)
     git_pull
     git_checkout(branch)
 
@@ -37,7 +37,7 @@ class BuildRunner
       @build.send_progress_status(message: 'Running bundle install...')
       if bundle_install
         @build.send_progress_status(message: 'Running Mutant Tests...')
-        run_mutant(filter, result_json, stdout_file)
+        run_mutant(filter: filter, json_out: result_json, stdout: stdout_file, fail_fast: fail_fast)
 
         stdout_text = File.exist?(stdout_file) ? File.read(stdout_file) : nil
 
@@ -107,9 +107,10 @@ class BuildRunner
     log(`#{be_cmd}`)
   end
 
-  def git_reset
-    `git checkout -- Gemfile Gemfile.lock`
-    log('git checkout .')
+  def git_reset(branch)
+    cmd = %(git reset --hard origin/#{branch})
+    log(cmd)
+    log(`#{cmd}`)
   end
 
   def git_pull
@@ -128,15 +129,27 @@ class BuildRunner
     `git rev-parse HEAD`.chomp
   end
 
-  def mutant_gem
-    %(gem "mutant-rspec", github: "jheth/mutant", branch: 'json-output-reporter')
+  def rspec3?
+    true
   end
 
-  def run_mutant(filter, result_json, stdout_file)
+  def mutant_gem
+    mutant_version = rspec3? ? 'json-output-reporter' : 'rspec2-json'
+    %(gem "mutant-rspec", github: "jheth/mutant", branch: '#{mutant_version}')
+  end
+
+  def run_mutant(filter: filter, json_out: nil, stdout: nil, fail_fast: fail_fast)
     # %(RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec User)
-    cmd = %(bundle exec mutant --include lib/ --json-dump "#{result_json}" --use rspec #{filter.join(' ')} &> "#{stdout_file}")
-    log(cmd)
-    log(`#{cmd}`)
+    cmd = ["bundle exec mutant"]
+    cmd << ["--include lib/"]
+    #cmd << ["--require dynamics_crm"] unless rspec3?
+    cmd << ["--fail-fast"] if fail_fast
+    cmd << %(--json-dump #{json_out})
+    cmd << %(--use rspec #{filter.join(' ')})
+    cmd << %(   &> "#{stdout}")
+    cmd_str = cmd.join(' ')
+    log(cmd_str)
+    log(`#{cmd_str}`)
   end
 
 end

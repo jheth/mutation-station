@@ -17,8 +17,11 @@ h2 Build ##{@build.id}
 
   div#buildTabContent class="tab-content"
     div class="tab-pane fade active in" id="main"
-
-      - if @result_data.is_a?(Hash)
+      - if @build.status == Build::ERROR
+        h4 Oops. Looks like something went wrong. Check the logs for details.
+      - elsif @build.status == Build::RUNNING
+        h4 Your build is currently running! Check back soon.
+      - elsif @result_data.is_a?(Hash)
         label Configuration
 
         - ['matcher', 'integration', 'expect_coverage', 'jobs', 'includes'].each do |key|
@@ -71,8 +74,6 @@ h2 Build ##{@build.id}
             = render "subject_result", result: result
         - else
           | Our Mutants were too much for your code. Better luck next time.
-      - else
-        h4 Oops. Looks like something went wrong. Check the logs for details.
 
     div class="tab-pane fade" id="stdout"
       - if @build.stdout.present?

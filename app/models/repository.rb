@@ -7,6 +7,9 @@ class Repository < ActiveRecord::Base
 
   paginates_per 10
 
+  # Put cloning into the queue to avoid long wait times.
+  after_create { self.delay.clone }
+
   QUEUED = 0
   IN_PROGRESS = 1
   COMPLETE = 2
@@ -16,6 +19,10 @@ class Repository < ActiveRecord::Base
     id = ENV.fetch('GITHUB_CLIENT_ID')
     secret = ENV.fetch('GITHUB_CLIENT_SECRET')
     client = Octokit::Client.new(client_id: id, client_secret: secret)
+  end
+
+  def github_url
+    self.clone_url.gsub('.git', '')
   end
 
   def working_directory
@@ -28,7 +35,10 @@ class Repository < ActiveRecord::Base
 
   def clone
     cwd = Rails.root.join('tmp', name)
-    unless Dir.exist?(cwd) && Dir.exist?(File.join(cwd, '.git'))
+    if Dir.exist?(cwd) && Dir.exist?(File.join(cwd, '.git'))
+      self.update_column(:clone_status, COMPLETE)
+      send_clone_status('success', "Repository #{self.name} is ready!")
+    else
       FileUtils.mkdir_p(cwd)
 
       Dir.chdir(cwd) do

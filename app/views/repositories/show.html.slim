@@ -2,8 +2,8 @@
   .pull-left
     h2 style="margin-top: 0;" = @repo.name
     h4
-      a href="#{@repo.clone_url}" target="_blank"
-        = @repo.clone_url
+      a href="#{@repo.github_url}" target="_blank"
+        = @repo.github_url
   .pull-right
     br
     - if @repo.cloned?
@@ -14,6 +14,8 @@
               option value="#{name}" = name
           ' &nbsp;&nbsp;
           = f.submit "Build Now", class: "btn btn-primary"
+        input type="checkbox" name="fail_fast" &nbsp;Quicky Mode (Stop on first failure)
+
     - else
       h4 class="cloning-repo-#{@repo.id}"
         | We're still cloning the repo... give us another minute.

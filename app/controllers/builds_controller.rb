@@ -5,6 +5,7 @@ class BuildsController < ApplicationController
   def create
     class_names = params['class_names']
     branch = 'master'
+    fail_fast = params[:fail_fast] || false
 
     @build = Build.new
 
@@ -18,7 +19,12 @@ class BuildsController < ApplicationController
       )
 
       if @build.save && class_names.is_a?(Array)
-        BuildRunner.new.delay.perform(@build.id, class_names, branch)
+        BuildRunner.new.delay.perform(
+          build_id: @build.id,
+          filter: class_names,
+          branch: 'master',
+          fail_fast: fail_fast
+        )
       else
         @build.errors.add(:base, "Aw Snap! Something bad happened.")
       end
