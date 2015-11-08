@@ -5,7 +5,7 @@ class Repository < ActiveRecord::Base
   validates :name, :clone_url, presence: true, uniqueness: true
   validate :check_eligibility
 
-  paginates_per 10
+  paginates_per 5
 
   # Put cloning into the queue to avoid long wait times.
   # after_create { self.delay.clone }

@@ -7,8 +7,6 @@
     => icon("github")
     ' #{current_user.name}'s Repositories
     small Open Source
-  br
-  = render partial: "shared/basic_search_form", locals: { search_path: root_path }
 .page-content
   - @repositories.each do |repository|
     .panel.panel-default
@@ -18,4 +16,18 @@
         = link_to [repository.user, repository], method: :delete, class: "pull-right", style: "margin: 10.5px 0;" do
           => icon("trash")
           | Delete
-  = paginate @repositories
+  = paginate @repositories, param_name: :personal_page
+
+.page-header
+  h3
+    => icon("github")
+    ' Public Repositories
+    small Open Source
+  = render partial: "shared/basic_search_form", locals: { search_path: repositories_path }
+.page-content
+  - @public_repositories.each do |repository|
+    .panel.panel-default
+      .panel-body
+        = link_to [repository.user, repository], class: "pull-left" do
+          h4 = repository.name
+  = paginate @public_repositories, param_name: :public_page

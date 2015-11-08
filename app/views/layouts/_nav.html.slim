@@ -9,9 +9,6 @@ nav.navbar.navbar-default
         span.icon-bar
       = link_to "MutationStation", root_path, class: "navbar-brand"
     #navbar-collapse.collapse.navbar-collapse
-      ul.nav.navbar-nav
-        li
-          = link_to "Public Repos", repositories_path
       ul.nav.navbar-nav.navbar-right
         - if user_signed_in?
           li
