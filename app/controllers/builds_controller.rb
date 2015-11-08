@@ -7,7 +7,7 @@ class BuildsController < ApplicationController
     branch = 'master'
 
     if class_names.is_a?(Array)
-      Build.delay.perform(@repo.id, current_user.id, class_names, branch)
+      BuildRunner.new.delay.perform(@repo.id, current_user.id, class_names, branch)
     end
 
     head :no_content

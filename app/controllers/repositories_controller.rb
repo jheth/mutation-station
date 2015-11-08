@@ -15,7 +15,7 @@ class RepositoriesController < ApplicationController
   def show
     @repo = Repository.find(params[:id])
     # @gh_repo = @repo.github_repo
-    @builds = @repo.builds
+    @builds = @repo.builds.order('created_at desc')
 
     @spec_list = @repo.class_list
     @spec_list_tag_str = @spec_list.join(',')
