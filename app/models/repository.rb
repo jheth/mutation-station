@@ -44,7 +44,7 @@ class Repository < ActiveRecord::Base
   def clone
     cwd = Rails.root.join('tmp', name)
     if Dir.exist?(cwd) && Dir.exist?(File.join(cwd, '.git'))
-      #self.update_column(:clone_status, COMPLETE)
+      self.update_column(:clone_status, COMPLETE)
       #send_clone_status('success', "Repository #{self.name} is ready!")
     else
       FileUtils.mkdir_p(cwd)
