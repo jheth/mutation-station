@@ -10,6 +10,9 @@
       = link_to user_omniauth_authorize_path(:github), class: "btn sign-in btn-primary btn-lg" do
         i.fa.fa-github
         |   Sign in with Github
+    p
+      ' Not ready to battle mutants?
+      =< link_to "Check out other repositories.", repositories_path
   .row
     .col-lg-4.blurb.center
       = image_tag("mutation-station-02.svg")

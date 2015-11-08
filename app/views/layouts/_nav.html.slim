@@ -9,15 +9,18 @@ nav.navbar.navbar-default
         span.icon-bar
       = link_to "MutationStation", root_path, class: "navbar-brand"
     #navbar-collapse.collapse.navbar-collapse
+      ul.nav.navbar-nav
+        li
+          = link_to "All Repos", repositories_path
       ul.nav.navbar-nav.navbar-right
         - if user_signed_in?
           li
             p.navbar-text
-              | Signed in as 
+              ' Signed in as
               = current_user.name
           li
             = link_to "Log out", destroy_user_session_path, method: :delete
         - else
           = link_to user_omniauth_authorize_path(:github), class: "btn btn-default navbar-btn" do
             = icon("github")
-            |  Sign in with Github 
+            |  Sign in with Github
