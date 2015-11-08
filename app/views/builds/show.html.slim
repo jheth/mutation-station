@@ -1,5 +1,5 @@
 .report-header
-  h2 Build ##{@build.id}
+  h2 #{@build.repository.name}: Build ##{@build.id}
 
   - if @result_data.is_a?(Hash)
     - env_progress = @result_data['env_progress']
