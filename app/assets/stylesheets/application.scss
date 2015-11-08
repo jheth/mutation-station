@@ -1,7 +1,9 @@
 @import 'font-awesome-sprockets';
 @import 'bootstrap-sprockets';
+@import "bootswatch/flatly/variables";
 @import 'font-awesome';
 @import 'bootstrap';
+@import "bootswatch/flatly/bootswatch";
 @import 'select2';
 @import 'dashboard';
 @import 'toastr';
