@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     resources :repositories, only: [:create, :show]
   end
 
+  get '/repositories/search', to: 'repositories#search'
   resources :repositories, only: [] do
     resources :builds
   end

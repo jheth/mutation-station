@@ -3,4 +3,5 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require select2
+//= require typehead.js.js
 //= require_tree .

@@ -21,6 +21,13 @@ class RepositoriesController < ApplicationController
     @spec_list_tag_str = @spec_list.join(',')
   end
 
+  def search
+    id = ENV.fetch('GITHUB_CLIENT_ID')
+    secret = ENV.fetch('GITHUB_CLIENT_SECRET')
+    client = Octokit::Client.new(client_id: id, client_secret: secret)
+    render json: client.search_repositories(params[:term]).items.map(&:full_name)
+  end
+
   private
 
   def repository_params
