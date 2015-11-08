@@ -42,6 +42,14 @@ class BuildRunner
           bundle_install(filter: 'mutant')
         end
 
+        if @repository.rails_app?
+          log("Attempting to setup Rails environment. Mysql is not supported.")
+          @build.send_progress_status(message: 'Setting up Rails environment...')
+          db_cmd = %(RAILS_ENV=test bundle exec rake db:reset)
+          log(db_cmd)
+          log(`#{db_cmd}`)
+        end
+
         @build.send_progress_status(message: 'Running Mutant Tests...')
         run_mutant(filter: filter, json_out: result_json, stdout: stdout_file, fail_fast: fail_fast)
 
@@ -76,13 +84,16 @@ class BuildRunner
     File.unlink(stdout_file) if File.exist?(stdout_file)
   rescue => e
     log(e.message)
-    log(e.backtrace.join("\n"))
+    unless e.class == ArgumentError
+      log(e.backtrace.join("\n"))
+    end
 
     @build.update_attributes({
       status: Build::ERROR,
       last_sha: current_sha,
       build_log: File.read(build_log)
     })
+    @build.send_progress_status(status: Build::ERROR, message: e.message)
   end
 
   def build_log
@@ -140,7 +151,11 @@ class BuildRunner
   def rspec3?
     version = `bundle show rspec-core`
     if version =~ /rspec-core-([\d\.]+)/
-      return $1.to_f >= 3.0
+      if $1.to_f >= 3.3
+        raise ArgumentError.new("Unsupported RSpec Version (#{$1}). RSpec 3.2 is the highest version supported.")
+      end
+
+      return $1.to_f >= 3.2
     else
       true
     end
@@ -174,11 +189,17 @@ class BuildRunner
   end
 
   def run_mutant(filter: '', json_out: nil, stdout: nil, fail_fast: false)
-    # %(RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec User)
+
     cmd = ["bundle exec mutant"]
-    cmd << ["--include lib/"]
-    if rfile = require_file
-      cmd << ["--require #{rfile}"]
+
+    if @repository.rails_app?
+      cmd.unshift("RAILS_ENV=test")
+      cmd << %(-r ./config/environment)
+    else
+      cmd << ["--include lib/"]
+      if rfile = require_file
+        cmd << ["--require #{rfile}"]
+      end
     end
 
     cmd << ["--fail-fast"] if fail_fast

@@ -89,6 +89,11 @@ class Repository < ActiveRecord::Base
     convert_files_to_class_list(spec_list)
   end
 
+  def rails_app?
+    gemfile = File.join(working_directory, 'Gemfile')
+    @rails ||= system(%{grep -q rails #{gemfile}})
+  end
+
   def set_github_details
     gh = octokit_client.repo(name)
 
@@ -121,6 +126,8 @@ class Repository < ActiveRecord::Base
   end
 
   def namespace
+    return nil if rails_app?
+
     unless @namespace
       gemspec_file = Dir.glob(File.join(working_directory, "*.gemspec")).first
       @namespace = ''
@@ -145,7 +152,14 @@ class Repository < ActiveRecord::Base
         matches = s.match(%r{spec\/(?:lib\/|unit\/)?([\w\/]*)_spec.rb})
         if matches.present?
           tokens = matches[1].split('/')
-          if namespace.present? && tokens.first != namespace
+          # Exclude common folders
+          if rails_app?
+            if ['features', 'requests', 'routing', 'views'].include?(tokens.first)
+              nil
+            elsif ['models', 'controllers', 'helpers', 'mailers'].include?(tokens.first)
+              tokens.shift
+            end
+          elsif namespace.present? && tokens.first != namespace
             # Watch out for case sensitivity issues.
             if tokens.first.downcase == namespace.downcase
               tokens[0] = namespace
