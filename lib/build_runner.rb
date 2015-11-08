@@ -151,14 +151,15 @@ class BuildRunner
 
   def rspec3?
     version = `bundle show rspec-core`
+    log(version)
+
     if version =~ /rspec-core-([\d\.]+)/
       if $1.to_f >= 3.3
         raise ArgumentError.new("Unsupported RSpec Version (#{$1}). RSpec 3.2 is the highest version supported.")
       end
-      log(version)
       return $1.to_f >= 3.0
     else
-      true
+      false
     end
   end
 
