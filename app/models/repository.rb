@@ -8,7 +8,7 @@ class Repository < ActiveRecord::Base
   paginates_per 10
 
   # Put cloning into the queue to avoid long wait times.
-  after_create { self.delay.clone }
+  # after_create { self.delay.clone }
 
   QUEUED = 0
   IN_PROGRESS = 1
@@ -26,7 +26,10 @@ class Repository < ActiveRecord::Base
   end
 
   def working_directory
-    Rails.root.join('tmp', name)
+    cwd = Rails.root.join('tmp', name)
+    # Clone it.
+    self.clone
+    cwd
   end
 
   def cloned?
@@ -41,8 +44,8 @@ class Repository < ActiveRecord::Base
   def clone
     cwd = Rails.root.join('tmp', name)
     if Dir.exist?(cwd) && Dir.exist?(File.join(cwd, '.git'))
-      self.update_column(:clone_status, COMPLETE)
-      send_clone_status('success', "Repository #{self.name} is ready!")
+      #self.update_column(:clone_status, COMPLETE)
+      #send_clone_status('success', "Repository #{self.name} is ready!")
     else
       FileUtils.mkdir_p(cwd)
 
