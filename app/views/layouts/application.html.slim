@@ -6,6 +6,8 @@ html
     = favicon_link_tag 'favi.png', type: 'image/png'
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = javascript_include_tag 'https://cdn.jsdelivr.net/ace/1.2.1/noconflict/ace.js'
+
     = csrf_meta_tags
   body class="#{controller_name} #{action_name} #{controller_name == 'pages' && action_name == 'show' ? 'gradient' : nil}"
     - unless controller_name == "pages"
