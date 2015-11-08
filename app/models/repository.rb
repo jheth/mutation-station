@@ -26,20 +26,16 @@ class Repository < ActiveRecord::Base
   end
 
   def working_directory(delay: true)
-    cwd = Rails.root.join('tmp', name)
-    unless (Dir.exist?(cwd) && Dir.exist?(File.join(cwd, '.git')))
-      self.update_attributes(clone_status: QUEUED)
-      if delay
-        self.delay.clone
-      else
-        self.clone
-      end
-    end
-    cwd
+    Rails.root.join('tmp', name)
   end
 
   def cloned?
-    self.clone_status == COMPLETE
+    self.clone_status == COMPLETE && Dir.exist?(working_directory)
+  end
+
+  def re_clone
+    self.update_column(:clone_status, QUEUED)
+    self.delay.clone
   end
 
   def clone

@@ -20,6 +20,10 @@ class RepositoriesController < ApplicationController
     # @gh_repo = @repo.github_repo
     @builds = @repo.builds.order('created_at desc')
 
+    unless @repo.cloned?
+      @repo.delay.re_clone
+    end
+
     @spec_list = @repo.class_list
     @spec_list_tag_str = @spec_list.join(',')
   end

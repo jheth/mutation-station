@@ -7,7 +7,11 @@ class BuildRunner
     @build.send_progress_status(status: Build::RUNNING, message: 'Build Started...')
 
     # Make sure we have the repo
-    working_dir = repository.working_directory(delay: false)
+    working_dir = repository.working_directory
+    unless @repo.cloned?
+      @repo.re_clone
+    end
+
     Dir.chdir(working_dir)
 
     @build.send_progress_status(message: 'Pulling latest changes from github.')
@@ -139,7 +143,7 @@ class BuildRunner
     %(gem "mutant-rspec", github: "jheth/mutant", branch: '#{mutant_version}')
   end
 
-  def run_mutant(filter: filter, json_out: nil, stdout: nil, fail_fast: fail_fast)
+  def run_mutant(filter: '', json_out: nil, stdout: nil, fail_fast: false)
     # %(RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec User)
     cmd = ["bundle exec mutant"]
     cmd << ["--include lib/"]
