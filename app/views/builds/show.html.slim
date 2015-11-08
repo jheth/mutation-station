@@ -12,7 +12,7 @@ h4 You have #{env_progress["alive"]} undead mutants!
     li class="active"
       a href="#main" data-toggle="tab" aria-expanded="true" Results
     li
-      a href="#stdout" data-toggle="tab" aria-expanded="false" Log
+      a href="#stdout" data-toggle="tab" aria-expanded="false" Logs
 
   div#buildTabContent class="tab-content"
     div class="tab-pane fade active in" id="main"
@@ -26,15 +26,33 @@ h4 You have #{env_progress["alive"]} undead mutants!
             | #{config[key]}
 
       label Results
-
-      - ['coverage', 'expected', 'kills', 'killtime', 'mutations', 'overhead',
-        'runtime', 'subjects'].each do |key|
-        .row
-          .col-md-4
-            = key.titleize
-          .col-md-4
-            = env_progress[key]
-
+      .row
+        .col-md-4 Subjects
+        .col-md-4 = env_progress['subjects']
+      .row
+        .col-md-4 Mutations
+        .col-md-4 = env_progress['mutations']
+      .row
+        .col-md-4 Kills
+        .col-md-4 = env_progress['kills']
+      .row
+        .col-md-4 Alive
+        .col-md-4 = env_progress['alive']
+      .row
+        .col-md-4 Runtime
+        .col-md-4 = ("%0.2fs" % env_progress['runtime'])
+      .row
+        .col-md-4 Killtime
+        .col-md-4 = ("%0.2fs" % env_progress['killtime'])
+      .row
+        .col-md-4 Overhead
+        .col-md-4 = ("%0.2f%%" % env_progress['overhead'])
+      .row
+        .col-md-4 Coverage
+        .col-md-4 = ("%0.2f%%" % env_progress['coverage'])
+      .row
+        .col-md-4 Expected
+        .col-md-4 = ("%0.2f%%" % env_progress['expected'])
 
       h3 Failures
       - if @result_data['failed_subject_results'].any?
@@ -52,9 +70,13 @@ h4 You have #{env_progress["alive"]} undead mutants!
         | Our Mutants were too much for your code. Better luck next time.
 
     div class="tab-pane fade" id="stdout"
-      h3 Standard Out
+      h3 Mutant Output
       .editor style="width: 100%; height: 500px"
         = @build.stdout
+
+      h3 Build Output
+      .editor style="width: 100%; height: 500px"
+        = @build.build_log
 
 javascript:
   $(document).ready(function() {
