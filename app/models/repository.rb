@@ -25,7 +25,7 @@ class Repository < ActiveRecord::Base
     self.clone_url.gsub('.git', '')
   end
 
-  def working_directory(delay: true)
+  def working_directory
     Rails.root.join('tmp', name)
   end
 

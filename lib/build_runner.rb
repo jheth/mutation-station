@@ -8,10 +8,6 @@ class BuildRunner
 
     # Make sure we have the repo
     working_dir = repository.working_directory
-    unless @repo.cloned?
-      @repo.re_clone
-    end
-
     Dir.chdir(working_dir)
 
     @build.send_progress_status(message: 'Pulling latest changes from github.')
