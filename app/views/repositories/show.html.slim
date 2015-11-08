@@ -4,19 +4,23 @@
     h4 = link_to(@repo.clone_url)
   .pull-right
     br
-    = form_for([@repo, Build.new], url: repository_builds_path(@repo), remote: true) do |f|
+    - if @repo.cloned?
+      = form_for([@repo, Build.new], url: repository_builds_path(@repo), remote: true) do |f|
+        .spec-list-container.clearfix
+          select class="select2-search__field" multiple="multiple" style="width: 500px" name="class_names[]"
+            - @spec_list.each do |name|
+              option value="#{name}" = name
+          ' &nbsp;&nbsp;
+          = f.submit "Build Now", class: "btn btn-primary"
+    - else
+      h4 class="cloning-repo-#{@repo.id}"
+        | We're still cloning the repo... give us another minute.
 
-      .spec-list-container.clearfix
-        select class="select2-search__field" multiple="multiple" style="width: 500px" name="class_names[]"
-          - @spec_list.each do |name|
-            option value="#{name}" = name
-        ' &nbsp;&nbsp;
-        = f.submit "Build Now", class: "btn btn-primary"
-
-h2 Builds
-ul.builds
-  - @builds.each do |build|
-    = render "build_card", build: build
+- if @repo.cloned?
+  h2 Builds
+  ul.builds
+    - @builds.each do |build|
+      = render "build_card", build: build
 
 javascript:
   $(document).ready(function() {

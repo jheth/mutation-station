@@ -12,19 +12,19 @@ class Build < ActiveRecord::Base
   COMPLETE = 2
   ERROR = 3
 
-  after_update :send_pusher
-
-  def send_pusher
+  def send_progress_status(message: nil, status: nil)
     # Send Pusher on status/value changes
+    self.status = status unless status.nil?
+
     begin
       hash = {
         id: self.id,
         status: self.status,
-        last_sha: self.last_sha,
         status_text: self.status_text,
+        message: message,
         url: "/repositories/#{self.repository.id}/builds/#{self.id}",
       }
-      Pusher.trigger('build_status_channel', 'client-build-update', hash)
+      Pusher.trigger('status_channel', 'client-build-update', hash)
     rescue Pusher::Error => e
       # (Pusher::AuthenticationError, Pusher::HTTPError, or Pusher::Error)
     end

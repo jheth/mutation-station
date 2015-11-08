@@ -5,7 +5,7 @@ div id="build-#{build.id}" class="row #{build.status_text}"
     - if build.last_sha
       = build.last_sha
     - else
-      ' Waiting on latest SHA...
+      ' Pending...
       i.fa.fa-icon.fa-cog.fa-spin
 
   .col-md-1.status

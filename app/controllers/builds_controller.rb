@@ -20,8 +20,7 @@ class BuildsController < ApplicationController
       if @build.save && class_names.is_a?(Array)
         BuildRunner.new.delay.perform(@build.id, class_names, branch)
       else
-        @build.errors.add(:base, "Something bad happened")
-        @build.errors.add(:base, "Aw Snap!")
+        @build.errors.add(:base, "Aw Snap! Something bad happened.")
       end
     end
     # create.js.erb

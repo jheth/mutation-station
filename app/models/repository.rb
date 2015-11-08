@@ -4,7 +4,13 @@ class Repository < ActiveRecord::Base
 
   validates :name, :clone_url, presence: true, uniqueness: true
 
+
   paginates_per 10
+
+  QUEUED = 0
+  IN_PROGRESS = 1
+  COMPLETE = 2
+  ERROR = 3
 
   def github_repo
     id = ENV.fetch('GITHUB_CLIENT_ID')
@@ -15,18 +21,35 @@ class Repository < ActiveRecord::Base
   end
 
   def working_directory
+    Rails.root.join('tmp', name)
+  end
+
+  def cloned?
+    self.clone_status == COMPLETE
+  end
+
+  def clone
     cwd = Rails.root.join('tmp', name)
-    unless Dir.exist?(cwd)
+    unless Dir.exist?(cwd) && Dir.exist?(File.join(cwd, '.git'))
       FileUtils.mkdir_p(cwd)
 
       Dir.chdir(cwd) do
-        puts 'Cloning repository into...'
-        response = `git clone #{clone_url} .`
-        puts response
+        self.update_column(:clone_status, IN_PROGRESS)
+        send_clone_status('cloning', 'Cloning repository into...')
+        response = system("git clone #{clone_url} .")
+
+        if response
+          self.update_column(:clone_status, COMPLETE)
+          status = 'success'
+          message = "Repository #{self.name} is ready!"
+        else
+          self.update_column(:clone_status, ERROR)
+          status = 'error'
+          message = "An error occurred while cloning #{self.name}."
+        end
+        send_clone_status(status, message)
       end
     end
-
-    cwd
   end
 
   def specs?
@@ -60,6 +83,21 @@ class Repository < ActiveRecord::Base
     assign_attributes(attributes)
   rescue Octokit::NotFound
     errors.add(:repository, 'cannot be located on GitHub.')
+  end
+
+  def send_clone_status(status, message)
+    # Send Pusher on status/value changes
+    begin
+      hash = {
+        id: self.id,
+        status: status,
+        status_text: message,
+        url: "/repositories/#{self.id}",
+      }
+      Pusher.trigger('status_channel', 'client-repository-status', hash)
+    rescue Pusher::Error => e
+      # (Pusher::AuthenticationError, Pusher::HTTPError, or Pusher::Error)
+    end
   end
 
   def self.convert_files_to_class_list(file_list)

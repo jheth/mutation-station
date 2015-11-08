@@ -7,6 +7,8 @@ class RepositoriesController < ApplicationController
     @repository.set_github_details
 
     if @repository.save
+      # Put cloning into the queue to avoid long wait times.
+      @repository.delay.clone
       flash[:notice] = "#{@repository.name} has been added."
     else
       flash[:error] = "#{@repository.errors.full_messages}"

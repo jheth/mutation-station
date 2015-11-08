@@ -3,7 +3,7 @@ $(document).ready(function() {
 
   var pusher = new Pusher("<%= Pusher.key %>", {encryption: true});
 
-  var channel = pusher.subscribe("build_status_channel");
+  var channel = pusher.subscribe("status_channel");
 
   channel.bind('client-build-update', function(data) {
     var build = $('div#build-' + data.id);
@@ -11,15 +11,29 @@ $(document).ready(function() {
       if (data.status_text) {
         build.find('.status').text(data.status_text);
         build.attr('css', 'row ' + data.status_text.toLowerCase());
+
         if (data.status === 2) {
           toastr["success"]('Build #' + data.id + ' Complete! <a href="' + data.url + '">Check it out</a>');
         }
       }
-      if (data.last_sha) {
-        build.find('.sha').text(data.last_sha);
+      if (data.message) {
+        build.find('.sha').text(data.message);
       }
     }
+  });
 
+  channel.bind('client-repository-status', function(data) {
+    var build = $('.cloning-repo-' + data.id);
+    if (build.length) {
+      if (data.status === 'success') {
+        toastr["success"](data.status_text);
+        window.location.reload();
+      } else if (data.status === 'error') {
+        toastr["error"](data.status_text);
+      } else {
+        toastr["success"](data.status_text);
+      }
+    }
   });
 
 });
