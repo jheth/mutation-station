@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
 
   has_many :repositories
 
+  after_create :send_welcome_email
+
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
       user.email = auth.info.email
@@ -17,5 +19,11 @@ class User < ActiveRecord::Base
       user.github_username = auth.info.nickname
       user.github_access_token = auth.credentials.token
     end
+  end
+
+  private
+
+  def send_welcome_email
+    UserNotifier.welcome_email(self).deliver
   end
 end

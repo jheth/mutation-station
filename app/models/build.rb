@@ -7,6 +7,8 @@ class Build < ActiveRecord::Base
 
   validates :status, presence: true
 
+  after_update :send_build_completed_email, if: 'status == 2'
+
   QUEUED = 0
   RUNNING = 1
   COMPLETE = 2
@@ -41,5 +43,11 @@ class Build < ActiveRecord::Base
     when ERROR
       'Error'
     end
+  end
+
+  private
+
+  def send_build_completed_email
+    BuildNotifier.build_finished(repository.user, self).deliver
   end
 end

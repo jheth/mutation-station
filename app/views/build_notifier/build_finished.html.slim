@@ -1,0 +1,14 @@
+doctype html
+html
+  head
+    meta[content="text/html; charset=UTF-8" http-equiv="Content-Type"]
+  body
+    h4
+      ' Yo,
+      =< @user.name
+      | !
+    p
+      ' Did your repository beat our mutants? You'll have to
+      a href="http://mutation-station.r15.railsrumble.com/repositories/#{@build.repository.id}/builds/#{@build.id}"
+        ' click here
+      ' to find out.
