@@ -29,6 +29,7 @@ gem 'puma'
 gem 'octokit', '~> 4.0'
 gem 'slim'
 gem 'pusher'
+gem 'kaminari'
 
 group :production do
   gem 'rails_12factor'

@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   end
 
   get '/repositories/search', to: 'repositories#search'
-  resources :repositories, only: [] do
+  resources :repositories, only: [:index] do
     resources :builds
   end
 end

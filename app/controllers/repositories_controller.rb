@@ -41,6 +41,10 @@ class RepositoriesController < ApplicationController
     end
   end
 
+  def index
+    @repositories = Repository.page(params[:page])
+  end
+
   private
 
   def redirect_to_existing_repository

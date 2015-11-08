@@ -4,6 +4,8 @@ class Repository < ActiveRecord::Base
 
   validates :name, :clone_url, presence: true, uniqueness: true
 
+  paginates_per 10
+
   def github_repo
     id = ENV.fetch('GITHUB_CLIENT_ID')
     secret = ENV.fetch('GITHUB_CLIENT_SECRET')

@@ -8,7 +8,7 @@
     ' Repositories
     small Open Source
 .page-content
-  - current_user.repositories.each do |repository|
+  - @repositories.each do |repository|
     .panel.panel-default
       .panel-body
         = link_to [repository.user, repository], class: "pull-left" do
@@ -16,4 +16,4 @@
         = link_to [repository.user, repository], method: :delete, class: "pull-right", style: "margin: 10.5px 0;" do
           => icon("trash")
           | Delete
-
+  = paginate @repositories

@@ -1,0 +1,15 @@
+.page-header
+  h3
+    => icon("github")
+    ' All Repositories
+    small Open Source
+  = form_tag repositories_path, method: 'get' do
+    .form-group
+      = text_field_tag :search, params[:search], class: "form-control", placeholder: "Search repositories..."
+.page-content
+  - @repositories.each do |repository|
+    .panel.panel-default
+      .panel-body
+        = link_to [repository.user, repository], class: "pull-left" do
+          h4 = repository.name
+  = paginate @repositories
