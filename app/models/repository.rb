@@ -3,7 +3,7 @@ class Repository < ActiveRecord::Base
   has_many :builds, dependent: :destroy
 
   validates :name, :clone_url, presence: true, uniqueness: true
-
+  validate :check_eligibility
 
   paginates_per 10
 
@@ -12,12 +12,10 @@ class Repository < ActiveRecord::Base
   COMPLETE = 2
   ERROR = 3
 
-  def github_repo
+  def octokit_client
     id = ENV.fetch('GITHUB_CLIENT_ID')
     secret = ENV.fetch('GITHUB_CLIENT_SECRET')
     client = Octokit::Client.new(client_id: id, client_secret: secret)
-
-    client.repo(name)
   end
 
   def working_directory
@@ -74,7 +72,11 @@ class Repository < ActiveRecord::Base
   end
 
   def set_github_details
-    gh = github_repo
+    gh = octokit_client.repo(name)
+
+    unless gh.language == 'Ruby'
+      errors.add(:repository, 'must be a Ruby application.')
+    end
 
     attributes = {
       clone_url: gh.clone_url,
@@ -114,4 +116,18 @@ class Repository < ActiveRecord::Base
     class_name_list
   end
 
+  def check_eligibility
+    gh = octokit_client.repo(name)
+
+    unless gh.language == 'Ruby'
+      errors.add(:repository, 'must be a Ruby application.')
+      return false
+    end
+
+    begin
+      octokit_client.contents(name, path: 'spec')
+    rescue Octokit::NotFound
+      errors.add(:repository, 'must use RSpec and have a spec folder.')
+    end
+  end
 end

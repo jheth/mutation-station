@@ -7,14 +7,13 @@ class RepositoriesController < ApplicationController
     @repository.set_github_details
 
     if @repository.save
-      # Put cloning into the queue to avoid long wait times.
-      @repository.delay.clone
       flash[:notice] = "#{@repository.name} has been added."
+      redirect_to [@repository.user, @repository]
     else
-      flash[:error] = "#{@repository.errors.full_messages}"
+      flash[:error] = @repository.errors.full_messages.first
+      redirect_to root_path
     end
 
-    redirect_to [@repository.user, @repository]
   end
 
   def show
