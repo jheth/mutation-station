@@ -3,22 +3,12 @@ class BuildsController < ApplicationController
   before_filter :load_repository
 
   def create
-    filter = []
-    if params['specs'].is_a?(Array)
-      filter = params['specs'].map do |s|
-        if matches = s.match(/spec\/lib\/([\w\/]*)_spec.rb/)
-          matches[1].split('/').map {|x|
-            x.camelize
-          }.join('::')
-        else
-          nil
-        end
-      end.compact
-    end
-
+    class_names = params['class_names']
     branch = 'master'
 
-    Build.delay.perform(@repo.id, current_user.id, filter, branch)
+    if class_names.is_a?(Array)
+      Build.delay.perform(@repo.id, current_user.id, class_names, branch)
+    end
 
     head :no_content
   end

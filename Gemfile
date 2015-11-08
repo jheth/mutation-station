@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-typehead.js'
+  gem 'rails-assets-select2', '~>3.5.4'
 end
 
 ruby '2.2.3'

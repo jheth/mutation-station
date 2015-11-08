@@ -7,45 +7,56 @@ h2 Build ##{@build.id}
 
 h4 You have #{env_progress["alive"]} undead mutants!
 
-label Configuration
+.bs-component
+  ul.nav.nav-tabs
+    li class="active"
+      a href="#main" data-toggle="tab" aria-expanded="true" Results
+    li
+      a href="#stdout" data-toggle="tab" aria-expanded="false" Log
 
-- ['matcher', 'integration', 'expect_coverage', 'jobs', 'includes'].each do |key|
-  .row
-    .col-md-4
-      | #{key.titleize}
-    .col-md-4
-      | #{config[key]}
+  div#buildTabContent class="tab-content"
+    div class="tab-pane fade active in" id="main"
+      label Configuration
 
-label Results
+      - ['matcher', 'integration', 'expect_coverage', 'jobs', 'includes'].each do |key|
+        .row
+          .col-md-4
+            | #{key.titleize}
+          .col-md-4
+            | #{config[key]}
 
-- ['coverage', 'expected', 'kills', 'killtime', 'mutations', 'overhead',
-  'runtime', 'subjects'].each do |key|
-  .row
-    .col-md-4
-      = key.titleize
-    .col-md-4
-      = env_progress[key]
+      label Results
+
+      - ['coverage', 'expected', 'kills', 'killtime', 'mutations', 'overhead',
+        'runtime', 'subjects'].each do |key|
+        .row
+          .col-md-4
+            = key.titleize
+          .col-md-4
+            = env_progress[key]
 
 
-h3 Failed
+      h3 Failed
 
-- @result_data['failed_subject_results'].each do |result|
-  = render "subject_result", result: result
+      - @result_data['failed_subject_results'].each do |result|
+        = render "subject_result", result: result
 
-h3 Success
+      h3 Success
 
-- @result_data['success_subject_results'].each do |result|
-  = render "subject_result", result: result
+      - @result_data['success_subject_results'].each do |result|
+        = render "subject_result", result: result
 
-h3 Standard Out
-textarea rows="40" cols="90"
-  = @build.stdout
+
+    div class="tab-pane fade" id="stdout"
+      h3 Standard Out
+      .editor style="width: 100%; height: 500px"
+        = @build.stdout
 
 javascript:
   $(document).ready(function() {
     $('.editor').each(function( index ) {
       editor = ace.edit(this);
-      editor.setTheme("ace/theme/monokai");
+      editor.setTheme("ace/theme/ambiance");
       editor.getSession().setMode("ace/mode/ruby");
       editor.setReadOnly(true);
     });

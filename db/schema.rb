@@ -17,14 +17,14 @@ ActiveRecord::Schema.define(version: 20151108000224) do
   enable_extension "plpgsql"
 
   create_table "builds", force: :cascade do |t|
-    t.integer  "repository_id", null: false
+    t.integer  "repository_id",             null: false
     t.string   "last_sha"
     t.json     "result"
     t.string   "stdout"
-    t.integer  "user_id",       null: false
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.string   "status"
+    t.integer  "user_id",                   null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "status",        default: 0
   end
 
   add_index "builds", ["repository_id"], name: "index_builds_on_repository_id", using: :btree

@@ -47,6 +47,10 @@ class Repository < ActiveRecord::Base
     @spec_list
   end
 
+  def class_list
+    self.class.convert_files_to_class_list(spec_list)
+  end
+
   def set_github_details
     gh = github_repo
 
@@ -58,4 +62,19 @@ class Repository < ActiveRecord::Base
   rescue Octokit::NotFound
     errors.add(:repository, 'cannot be located on GitHub.')
   end
+
+  def self.convert_files_to_class_list(file_list)
+    class_name_list = []
+    if file_list.is_a?(Array)
+      class_name_list = file_list.map do |s|
+        matches = s.match(%r{spec\/lib\/([\w\/]*)_spec.rb})
+        if matches.present?
+          matches[1].split('/').map(&:camelize).join('::')
+        end
+      end.compact
+    end
+
+    class_name_list
+  end
+
 end

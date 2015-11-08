@@ -1,17 +1,17 @@
-h2 = @repo.name
-h4 = @repo.clone_url
+.page-header.clearfix
+  .pull-left
+    h2 style="margin-top: 0;" = @repo.name
+    h4 = link_to(@repo.clone_url)
+  .pull-right
+    br
+    = form_for([@repo, Build.new], url: repository_builds_path(@repo), remote: true) do |f|
 
-h2 Tests
-
-= form_for([@repo, Build.new], url: repository_builds_path(@repo), remote: true) do |f|
-
-  ul.spec-list
-    - @spec_list.each do |spec_file|
-      div.checkbox
-        label
-          input type="checkbox" name="specs[]" value="#{spec_file}" = spec_file
-
-  = f.submit "Build Now", class: "btn btn-primary"
+      .spec-list-container.clearfix
+        select class="select2-search__field" multiple="multiple" style="width: 500px" name="class_names[]"
+          - @spec_list.each do |name|
+            option value="#{name}" = name
+        ' &nbsp;&nbsp;
+        = f.submit "Build Now", class: "btn btn-primary"
 
 h2 Builds
 ul.builds
@@ -23,3 +23,11 @@ ul.builds
         | #{build.created_at}
       .col-md-4
         | #{build.last_sha}
+
+javascript:
+  $(document).ready(function() {
+    $(".select2-search__field").select2({
+      placeholder: 'Search Objects to Mutate',
+      maximumSelectionSize: 4
+    });
+  });

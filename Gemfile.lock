@@ -215,6 +215,8 @@ GEM
       railties (= 4.2.4)
       sprockets-rails
     rails-assets-jquery (2.1.4)
+    rails-assets-select2 (3.5.4)
+      rails-assets-jquery (>= 1.7.1)
     rails-assets-typehead.js (0.11.1)
       rails-assets-jquery (>= 1.7)
     rails-deprecated_sanitizer (1.0.3)
@@ -339,6 +341,7 @@ DEPENDENCIES
   pry-rails
   puma
   rails (= 4.2.4)
+  rails-assets-select2 (~> 3.5.4)!
   rails-assets-typehead.js!
   rails_12factor
   rspec-rails (~> 3.0)
