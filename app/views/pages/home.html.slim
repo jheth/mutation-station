@@ -1,1 +1,52 @@
-
+.container
+  .jumbotron
+    = image_tag("mutation-station-01.svg")
+    h1.page-header
+      | Who Watches the Watchmen?
+    p.lead
+      ' We're good at breaking things. In fact, our research indicates that
+      ' we'll be able to break 99.991234% of your tests. Give us a shot. Please?
+    p
+      = link_to user_omniauth_authorize_path(:github), class: "btn sign-in btn-primary btn-lg" do
+        i.fa.fa-github
+        |   Sign in with Github
+  .row
+    .col-lg-4.blurb.center
+      = image_tag("mutation-station-02.svg")
+      h2
+        | Discover
+      p
+        ' Do you know what your tests actually cover? Studies show you don't.
+        ' Use MutationStation's tools to discover where you need help the most.
+    .col-lg-4.blurb.center
+      = image_tag("mutation-station-03.svg")
+      h2
+        ' Confidence
+      p
+        ' Gone are the days of deploying code and fearing the unknown. We'll
+        ' show you exactly where gaps exist in your tests so you can deploy with
+        ' confidence.
+    .col-lg-4.blurb.center
+      = image_tag("mutation-station-04.svg")
+      h2
+        | Write
+      p
+        ' MutationStation basically writes tests for your application. Okay,
+        ' that's a lie. But we do help you write better tests.
+.fullwidth
+  .container.footer
+    p
+      | Mutation Station is a project by Joe Heth, Clayton Parker, Alex Stophel and Tim Mahan.
+    p
+      ' Icons made by
+      a[href="http://www.freepik.com" title="Freepik"]
+      ' Freepik
+      ' from
+      a[href="http://www.flaticon.com" title="Flaticon"]
+        ' www.flaticon.com
+      ' is licensed by
+      a[href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0"]
+        ' CC BY 3.0
+    .railsrumble-logo
+      a[href="#"]
+        img[src="https://d4nnn7wspfa3h.cloudfront.net/assets/rr-logo-small-32e42895464d6fe47aa894990b3acc8c.png"]
