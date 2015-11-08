@@ -5,6 +5,8 @@ class Build < ActiveRecord::Base
   store_accessor :result, [:env_progress, :failed_subject_results,
                            :success_subject_results]
 
+  validates :status, presence: true
+
   def self.perform(repository_id, user_id, filter, branch = 'master')
     repository = Repository.find(repository_id)
     user = User.find(user_id)
