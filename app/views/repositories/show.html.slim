@@ -1,7 +1,9 @@
 .page-header.clearfix
   .pull-left
     h2 style="margin-top: 0;" = @repo.name
-    h4 = link_to(@repo.clone_url)
+    h4
+      a href="#{@repo.clone_url}" target="_blank"
+        = @repo.clone_url
   .pull-right
     br
     - if @repo.cloned?
