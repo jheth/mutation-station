@@ -31,19 +31,26 @@ class BuildRunner
       run_mutant(filter, result_json, stdout_file)
     end
 
+    mutant_json = nil
+    if File.exist?(result_json) && File.size(result_json) > 0
+      mutant_json = JSON.parse(File.read(result_json))
+      File.unlink(result_json)
+    else
+      log("WARN: JSON output file does not exist.")
+    end
+
     @build.update_attributes({
-      status: Build::COMPLETE,
+      status: mutant_json.is_a?(Hash) ? Build::COMPLETE : Build::ERROR,
       last_sha: current_sha,
-      result: JSON.parse(File.read(result_json)),
+      result: mutant_json,
       stdout: File.read(stdout_file),
       build_log: File.read(build_log)
     })
 
-    File.unlink(result_json)
-    File.unlink(stdout_file)
+    File.unlink(stdout_file) if File.exist?(stdout_file)
   rescue => e
-    puts e.message
-    puts e.backtrace.join('\n')
+    log(e.message)
+    log(e.backtrace.join("\n"))
 
     @build.update_attributes({
       status: Build::ERROR,
@@ -102,7 +109,7 @@ class BuildRunner
   end
 
   def run_mutant(filter, result_json, stdout_file)
-    cmd = %(bundle exec mutant --include lib/ --json-dump "#{result_json}" --use rspec #{filter.join(' ')} > "#{stdout_file}")
+    cmd = %(bundle exec mutant --include lib/ --json-dump "#{result_json}" --use rspec #{filter.join(' ')} &> "#{stdout_file}")
     log(cmd)
     log(`#{cmd}`)
   end

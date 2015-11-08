@@ -38,11 +38,8 @@ class Repository < ActiveRecord::Base
 
     filepath = working_directory
     if File.directory?(File.join(filepath, 'spec'))
-      excluded_files = ['factories', 'rails_helper.rb', 'spec_helper.rb']
       Dir.chdir(filepath) do
-        @spec_list = Dir.glob('spec/**/*.rb').reject do |x|
-          excluded_files.any? { |f| x.include?(f) }
-        end
+        @spec_list = Dir.glob('spec/**/*_spec.rb')
       end
     end
 
@@ -69,7 +66,7 @@ class Repository < ActiveRecord::Base
     class_name_list = []
     if file_list.is_a?(Array)
       class_name_list = file_list.map do |s|
-        matches = s.match(%r{spec\/lib\/([\w\/]*)_spec.rb})
+        matches = s.match(%r{spec\/(?:lib|unit)\/([\w\/]*)_spec.rb})
         if matches.present?
           matches[1].split('/').map(&:camelize).join('::')
         end

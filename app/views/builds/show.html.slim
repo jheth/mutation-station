@@ -1,11 +1,12 @@
 script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/ace.js" type="text/javascript" charset="utf-8"
 
-- env_progress = @result_data['env_progress']
-- config = env_progress['config']
 
 h2 Build ##{@build.id}
 
-h4 You have #{env_progress["alive"]} undead mutants!
+- if @result_data.is_a?(Hash)
+  - env_progress = @result_data['env_progress']
+  - config = env_progress['config']
+  h4 You have #{env_progress["alive"]} undead mutants!
 
 .bs-component
   ul.nav.nav-tabs
@@ -16,67 +17,72 @@ h4 You have #{env_progress["alive"]} undead mutants!
 
   div#buildTabContent class="tab-content"
     div class="tab-pane fade active in" id="main"
-      label Configuration
 
-      - ['matcher', 'integration', 'expect_coverage', 'jobs', 'includes'].each do |key|
+      - if @result_data.is_a?(Hash)
+        label Configuration
+
+        - ['matcher', 'integration', 'expect_coverage', 'jobs', 'includes'].each do |key|
+          .row
+            .col-md-4
+              | #{key.titleize}
+            .col-md-4
+              | #{config[key]}
+
+        label Results
         .row
-          .col-md-4
-            | #{key.titleize}
-          .col-md-4
-            | #{config[key]}
+          .col-md-4 Subjects
+          .col-md-4 = env_progress['subjects']
+        .row
+          .col-md-4 Mutations
+          .col-md-4 = env_progress['mutations']
+        .row
+          .col-md-4 Kills
+          .col-md-4 = env_progress['kills']
+        .row
+          .col-md-4 Alive
+          .col-md-4 = env_progress['alive']
+        .row
+          .col-md-4 Runtime
+          .col-md-4 = ("%0.2fs" % env_progress['runtime'])
+        .row
+          .col-md-4 Killtime
+          .col-md-4 = ("%0.2fs" % env_progress['killtime'])
+        .row
+          .col-md-4 Overhead
+          .col-md-4 = ("%0.2f%%" % env_progress['overhead'])
+        .row
+          .col-md-4 Coverage
+          .col-md-4 = ("%0.2f%%" % env_progress['coverage'])
+        .row
+          .col-md-4 Expected
+          .col-md-4 = ("%0.2f%%" % env_progress['expected'])
 
-      label Results
-      .row
-        .col-md-4 Subjects
-        .col-md-4 = env_progress['subjects']
-      .row
-        .col-md-4 Mutations
-        .col-md-4 = env_progress['mutations']
-      .row
-        .col-md-4 Kills
-        .col-md-4 = env_progress['kills']
-      .row
-        .col-md-4 Alive
-        .col-md-4 = env_progress['alive']
-      .row
-        .col-md-4 Runtime
-        .col-md-4 = ("%0.2fs" % env_progress['runtime'])
-      .row
-        .col-md-4 Killtime
-        .col-md-4 = ("%0.2fs" % env_progress['killtime'])
-      .row
-        .col-md-4 Overhead
-        .col-md-4 = ("%0.2f%%" % env_progress['overhead'])
-      .row
-        .col-md-4 Coverage
-        .col-md-4 = ("%0.2f%%" % env_progress['coverage'])
-      .row
-        .col-md-4 Expected
-        .col-md-4 = ("%0.2f%%" % env_progress['expected'])
+        h3 Failures
+        - if @result_data['failed_subject_results'].any?
+          - @result_data['failed_subject_results'].each do |result|
+            = render "subject_result", result: result
+        - else
+          | Wow. This hasn't happened before. I'm speechless.
 
-      h3 Failures
-      - if @result_data['failed_subject_results'].any?
-        - @result_data['failed_subject_results'].each do |result|
-          = render "subject_result", result: result
+        h3 Success
+        - if @result_data['success_subject_results'].any?
+          | You won this time. Good game.
+          - @result_data['success_subject_results'].each do |result|
+            = render "subject_result", result: result
+        - else
+          | Our Mutants were too much for your code. Better luck next time.
       - else
-        | Wow. This hasn't happened before. I'm speechless.
-
-      h3 Success
-      - if @result_data['success_subject_results'].any?
-        | You won this time. Good game.
-        - @result_data['success_subject_results'].each do |result|
-          = render "subject_result", result: result
-      - else
-        | Our Mutants were too much for your code. Better luck next time.
+        h4 Oops. Looks like something went wrong. Check the logs for details.
 
     div class="tab-pane fade" id="stdout"
-      h3 Mutant Output
-      .editor style="width: 100%; height: 500px"
-        = @build.stdout
-
-      h3 Build Output
-      .editor style="width: 100%; height: 500px"
-        = @build.build_log
+      - if @build.stdout.present?
+        h3 Mutant Output
+        .editor style="width: 100%; height: 500px"
+          = @build.stdout
+      - if @build.build_log
+        h3 Build Output
+        .editor style="width: 100%; height: 500px"
+          = @build.build_log
 
 javascript:
   $(document).ready(function() {
