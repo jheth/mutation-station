@@ -14,3 +14,257 @@
   height: 150px;
   width: 450px;
 }
+
+body {
+  background-color: #f6f6f6;
+}
+a { 
+  transition: .25s all ease !important;
+}
+ 
+.navbar-default {
+  border-radius: 0;
+}
+.navbar-header a.navbar-brand {
+  color: transparent;
+  width: 260px; 
+  background: url("http://gettinderbox.com/replay/railsrumble2015/mutation-station-05.svg");
+  background-repeat: no-repeat;
+  background-size: 88%;
+  background-position: 15px center;
+}
+.navbar-header a.navbar-brand:hover {
+  color:transparent;
+}
+.navbar-default .navbar-nav li a {
+  color: white;
+  background: #009e9c;
+  padding: 11px 20px 0;
+  border-radius: 4px;
+  height: 45px;
+  margin: 7.5px 0;
+  font-size: 16px;
+  display: inline-block;
+}
+.navbar-default p.navbar-text {
+  color: #E5E8EA;
+  padding-left: 20px;
+}
+.navbar-default .navbar-nav li a:hover,
+.navbar-default .navbar-nav li a:focus {
+  background: #2a92a1;
+  color: #E5E8EA;
+}
+.navbar-default .navbar-toggle {
+  background-color: #009e9c;
+}
+.navbar-default .navbar-toggle:hover, 
+.navbar-default .navbar-toggle:focus {
+  background: #2a92a1;
+}
+.container.mutation {
+    padding-top: 20px;
+}
+.container.mutation .page-header {
+    margin-top: 5px;
+}
+.page-header h3 {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 16px;
+}
+.breadcrumbs {
+    font-size: 14px;
+    color: #777777;
+}
+@media only screen and (max-width: 768px) {
+  ul.navbar-nav {
+    text-align: center;
+  }
+  .navbar-default p.navbar-text {
+    padding-left:0;
+  }
+}
+
+/* -- Repositories -- */
+
+body.dashboard .panel,
+body.repositories .panel {
+  margin-bottom: 5px;
+}
+body.dashboard .panel .panel-body,
+body.repositories .panel .panel-body {
+  padding: 5px 18px;
+}
+
+/* -- Tests & Builds -- */
+
+body.repositories .page-header .pull-left,
+body.repositories .page-header .pull-right {
+    float: none !important;
+}
+body.repositories .select2-container {
+  width: 1028px !important;
+}
+ul.builds {
+  padding-left: 0;
+}
+ul.builds .row {
+  padding: 20px;
+  border-top: 1px solid #ccc;
+  margin: 0;
+  background: #f9f9f9;
+}
+ul.builds .row:nth-child(odd) {
+  background: #ffffff;
+}
+ul.builds .row:last-of-type {
+  border-bottom: 1px solid #ccc;
+}
+ul.builds .row a {
+  background: #009e9c;
+  color: white;
+  padding: 10px;
+  border-radius: 35px;
+  font-weight: bold;
+}
+ul.builds .row a:hover,
+ul.builds .row a:active {
+  background: #2a92a1;
+  text-decoration:none;
+}
+
+ul.builds .row .col-md-1.status,
+ul.builds .row .col-md-2 {
+  text-align:center;
+}
+ul.builds .row .col-md-3 {
+  text-align:right;
+}
+@media only screen and (max-width: 1200px) {
+  body.repositories .select2-container {
+    width: 828px !important;
+  }
+}
+@media only screen and (max-width: 992px) {
+
+  body.repositories .select2-container {
+    width: 100% !important;
+  }
+  body.repositories .spec-list-container.clearfix input.btn.btn-primary {
+    margin: 12px 0 10px -8px;
+  }
+  ul.builds .row {
+    padding-left: 0px;
+  }
+  ul.builds .row a {
+    line-height:50px;
+  }
+  ul.builds .row .col-md-1:first-of-type {
+    position: absolute;
+  }
+  ul.builds .row .col-md-1.status,
+  ul.builds .row .col-md-2,
+  ul.builds .row .col-md-3  {
+    text-align:left;
+  }
+  ul.builds .row .col-md-5.sha,
+  ul.builds .row .col-md-1.status,
+  ul.builds .row .col-md-2,
+  ul.builds .row .col-md-3 {
+    margin-left: 50px;
+  }
+}
+@media only screen and (max-width: 640px) {
+  ul.builds .row .col-md-5.sha,
+  ul.builds .row .col-md-1.status,
+  ul.builds .row .col-md-2,
+  ul.builds .row .col-md-3 {
+    font-size: 12px;
+  }
+}
+
+/* -- Results -- */
+
+body.builds .container.mutation {
+  width:960px;
+  background:#fff;
+  position:relative;
+  padding:40px;
+  margin: 10px auto 40px;
+  box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.04) inset;
+}
+body.builds .container.mutation:before, 
+body.builds .container.mutation.builds:after {
+  content:"";
+  position:absolute; 
+  z-index:-1;
+  box-shadow:0 0 20px rgba(0,0,0,0.8);
+  top:10px;
+  bottom:10px;
+  left:0;
+  right:0;
+  border-radius:100px / 10px;
+} 
+body.builds .container.mutation:after {
+  right:10px; 
+  left:auto; 
+  transform:skew(8deg) rotate(3deg);
+}
+body.builds .container.mutation .breadcrumbs {
+  margin: -40px -40px 0 -40px;
+  padding: 10px 15px;
+  background: #2c3e50;
+  border-bottom: 1px solid #425262;
+  color: #969fa8;
+}
+.report-header {
+  margin: 0px -40px 0 -40px;
+  padding: 10px 40px 20px 139px;
+  background: #2c3e50;
+  color: #ffffff;
+  background-image: url(http://mutation-station.r15.railsrumble.com/assets/mutant01-dcccafa01466d405b58aae95cb6c9df72df8f06abc479b4d7ae70b2bae524ce2.png);
+  background-repeat: no-repeat;
+  background-size: 72px;
+  background-position: 45px 30px;
+}
+.bs-component ul.nav.nav-tabs {
+    margin: 0 -40px 20px;
+    padding: 0 40px 0;
+    background:#2c3e50;
+}
+.bs-component ul.nav.nav-tabs li a:hover {
+  color: #ffffff;
+  background-color:#009e9c;
+  border-color:#009e9c;
+  border-bottom-color: transparent;
+  border-bottom:none;
+}
+.bs-component ul.nav.nav-tabs li.active a:hover {
+  background-color: #ffffff;
+  border: 1px solid #ecf0f1;
+  border-bottom-color: transparent;
+  color: #2c3e50;
+}
+.tab-pane label {
+  font-size: 18px;
+  display: block;
+  border-bottom: 1px solid #efefef;
+  margin: 40px 0 10px;
+  padding: 0 0 8px 0;
+}
+label.editor-title {
+  font-size:16px;
+  line-height:20px;
+  border:none;
+  padding:0;
+}
+.ace-github {
+  border: 1px solid #ccc;
+}
+@media only screen and (max-width: 1020px) {
+  body.builds .container.mutation:last-of-type {
+    width: 96%;
+    margin: 20px 2% 40px;
+  }
+}
