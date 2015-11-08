@@ -42,7 +42,8 @@ class RepositoriesController < ApplicationController
   end
 
   def index
-    @repositories = Repository.page(params[:page])
+    search = Repository.ransack(name_cont: params[:search])
+    @repositories = search.result.page(params[:page])
   end
 
   private

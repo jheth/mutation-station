@@ -3,9 +3,7 @@
     => icon("github")
     ' All Repositories
     small Open Source
-  = form_tag repositories_path, method: 'get' do
-    .form-group
-      = text_field_tag :search, params[:search], class: "form-control", placeholder: "Search repositories..."
+  = render partial: "shared/basic_search_form", locals: { search_path: repositories_path }
 .page-content
   - @repositories.each do |repository|
     .panel.panel-default

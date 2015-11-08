@@ -7,6 +7,8 @@
     => icon("github")
     ' #{current_user.name}'s Repositories
     small Open Source
+  br
+  = render partial: "shared/basic_search_form", locals: { search_path: root_path }
 .page-content
   - @repositories.each do |repository|
     .panel.panel-default

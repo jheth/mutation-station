@@ -30,6 +30,7 @@ gem 'octokit', '~> 4.0'
 gem 'slim'
 gem 'pusher'
 gem 'kaminari'
+gem 'ransack'
 
 group :production do
   gem 'rails_12factor'

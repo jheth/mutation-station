@@ -1,5 +1,6 @@
 class DashboardController < ApplicationController
   def show
-    @repositories = Repository.page(params[:page])
+    search = @repositories = Repository.ransack(name_cont: params[:search])
+    @repositories = search.result.page(params[:page])
   end
 end
