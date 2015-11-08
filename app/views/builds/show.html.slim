@@ -36,16 +36,20 @@ h4 You have #{env_progress["alive"]} undead mutants!
             = env_progress[key]
 
 
-      h3 Failed
-
-      - @result_data['failed_subject_results'].each do |result|
-        = render "subject_result", result: result
+      h3 Failures
+      - if @result_data['failed_subject_results'].any?
+        - @result_data['failed_subject_results'].each do |result|
+          = render "subject_result", result: result
+      - else
+        | Wow. This hasn't happened before. I'm speechless.
 
       h3 Success
-
-      - @result_data['success_subject_results'].each do |result|
-        = render "subject_result", result: result
-
+      - if @result_data['success_subject_results'].any?
+        | You won this time. Good game.
+        - @result_data['success_subject_results'].each do |result|
+          = render "subject_result", result: result
+      - else
+        | Our Mutants were too much for your code. Better luck next time.
 
     div class="tab-pane fade" id="stdout"
       h3 Standard Out

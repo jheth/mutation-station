@@ -1,0 +1,7 @@
+<% if @build.errors.any? %>
+  <% @build.errors.full_messages.each do |message| %>
+    toastr["error"]("<%= message %>");
+  <% end %>
+<% else %>
+  $("ul.builds").prepend('<%=j render("/repositories/build_card", build: @build).html_safe %>');
+<% end %>

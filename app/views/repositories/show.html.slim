@@ -16,13 +16,7 @@
 h2 Builds
 ul.builds
   - @builds.each do |build|
-    .row
-      .col-md-4
-        = link_to(build.id, repository_build_path(build.repository, build))
-      .col-md-4
-        | #{build.created_at}
-      .col-md-4
-        | #{build.last_sha}
+    = render "build_card", build: build
 
 javascript:
   $(document).ready(function() {
@@ -31,3 +25,5 @@ javascript:
       maximumSelectionSize: 4
     });
   });
+
+= render 'shared/pusher'

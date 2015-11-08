@@ -1,8 +1,8 @@
 class BuildRunner
-  def perform(repository_id, user_id, filter, branch = 'master')
-    binding.pry
-    repository = Repository.find(repository_id)
-    user = User.find(user_id)
+  def perform(build_id, filter, branch = 'master')
+    @build = Build.find(build_id)
+    repository = @build.repository
+    @build.update_attributes(status: Build::RUNNING)
 
     working_dir = repository.working_directory
     Dir.chdir(working_dir)
@@ -31,13 +31,13 @@ class BuildRunner
       run_mutant(filter, result_json, stdout_file)
     end
 
-    Build.create!(
-      repository: repository,
-      user: user,
+    @build.update_attributes({
+      status: Build::COMPLETE,
       last_sha: current_sha,
       result: JSON.parse(File.read(result_json)),
       stdout: File.read(stdout_file),
-    )
+      build_log: File.read(build_log)
+    })
 
     File.unlink(result_json)
     File.unlink(stdout_file)
@@ -46,12 +46,15 @@ class BuildRunner
     puts e.backtrace.join('\n')
   end
 
+  def build_log
+    @logfile ||= "#{head_sha}_#{Time.now.to_s(:db).gsub(' ', '_')}.txt"
+  end
+
   def log(message)
-    @logger ||= File.open("#{head_sha}_#{Time.now.to_s(:db).gsub(' ', '_')}.txt", 'w')
-    unless @logger.sync
+    unless @logger
+      @logger ||= File.open(build_log, 'w')
       @logger.sync = true
     end
-
     @logger.write(message + "\n")
   end
 

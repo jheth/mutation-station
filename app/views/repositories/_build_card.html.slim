@@ -1,0 +1,16 @@
+div id="build-#{build.id}" class="row #{build.status_text}"
+  .col-md-1
+    = link_to(build.id, repository_build_path(build.repository, build))
+  .col-md-5.sha
+    - if build.last_sha
+      = build.last_sha
+    - else
+      ' Waiting on latest SHA...
+      i.fa.fa-icon.fa-cog.fa-spin
+
+  .col-md-1.status
+    | #{build.status_text}
+  .col-md-2
+    | #{build.user.name}
+  .col-md-3
+    | #{build.created_at}

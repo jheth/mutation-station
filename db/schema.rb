@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151108000224) do
+ActiveRecord::Schema.define(version: 20151108032425) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20151108000224) do
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
     t.integer  "status",        default: 0
+    t.text     "build_log"
   end
 
   add_index "builds", ["repository_id"], name: "index_builds_on_repository_id", using: :btree

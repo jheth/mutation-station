@@ -132,6 +132,7 @@ GEM
       activesupport (>= 4.1.0)
     hashie (3.4.3)
     high_voltage (2.4.0)
+    httpclient (2.7.0.1)
     i18n (0.7.0)
     ice_nine (0.11.1)
     jbuilder (2.3.2)
@@ -200,6 +201,11 @@ GEM
     pry-rails (0.3.4)
       pry (>= 0.9.10)
     puma (2.15.3)
+    pusher (0.15.1)
+      httpclient (~> 2.5)
+      multi_json (~> 1.0)
+      pusher-signature (~> 0.1.8)
+    pusher-signature (0.1.8)
     rack (1.6.4)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -215,8 +221,11 @@ GEM
       railties (= 4.2.4)
       sprockets-rails
     rails-assets-jquery (2.1.4)
+    rails-assets-pusher (3.0.0)
     rails-assets-select2 (3.5.4)
       rails-assets-jquery (>= 1.7.1)
+    rails-assets-toastr (2.1.2)
+      rails-assets-jquery (>= 1.6.3)
     rails-assets-typehead.js (0.11.1)
       rails-assets-jquery (>= 1.7)
     rails-deprecated_sanitizer (1.0.3)
@@ -340,8 +349,11 @@ DEPENDENCIES
   pry-byebug
   pry-rails
   puma
+  pusher
   rails (= 4.2.4)
+  rails-assets-pusher!
   rails-assets-select2 (~> 3.5.4)!
+  rails-assets-toastr!
   rails-assets-typehead.js!
   rails_12factor
   rspec-rails (~> 3.0)

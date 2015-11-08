@@ -3,6 +3,8 @@ source 'https://rubygems.org'
 source 'https://rails-assets.org' do
   gem 'rails-assets-typehead.js'
   gem 'rails-assets-select2', '~>3.5.4'
+  gem 'rails-assets-pusher'
+  gem 'rails-assets-toastr'
 end
 
 ruby '2.2.3'
@@ -25,6 +27,7 @@ gem 'delayed_job_active_record'
 gem 'puma'
 gem 'octokit', '~> 4.0'
 gem 'slim'
+gem 'pusher'
 
 group :production do
   gem 'rails_12factor'

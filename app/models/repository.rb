@@ -1,6 +1,6 @@
 class Repository < ActiveRecord::Base
   belongs_to :user
-  has_many :builds
+  has_many :builds, dependent: :destroy
 
   validates :name, :clone_url, presence: true
 

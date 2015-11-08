@@ -4,4 +4,6 @@
 //= require turbolinks
 //= require select2
 //= require typehead.js.js
+//= require pusher
+//= require toastr
 //= require_tree .

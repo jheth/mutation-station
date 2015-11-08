@@ -6,11 +6,25 @@ class BuildsController < ApplicationController
     class_names = params['class_names']
     branch = 'master'
 
-    if class_names.is_a?(Array)
-      BuildRunner.new.delay.perform(@repo.id, current_user.id, class_names, branch)
-    end
+    @build = Build.new
 
-    head :no_content
+    if class_names.blank?
+      @build.errors.add(:base, "Select at least 1 object to test.")
+    else
+      @build.assign_attributes(
+        repository: @repo,
+        user: current_user,
+        status: Build::QUEUED
+      )
+
+      if @build.save && class_names.is_a?(Array)
+        BuildRunner.new.delay.perform(@build.id, class_names, branch)
+      else
+        @build.errors.add(:base, "Something bad happened")
+        @build.errors.add(:base, "Aw Snap!")
+      end
+    end
+    # create.js.erb
   end
 
   def index
