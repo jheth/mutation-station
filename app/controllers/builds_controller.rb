@@ -40,6 +40,8 @@ class BuildsController < ApplicationController
     @build = Build.find(params[:id])
     @spec_list = @repo.spec_list
     @result_data = @build.result
+    add_breadcrumb(@repo.name, user_repository_path(@repo.user, @repo))
+    add_breadcrumb("Build ##{@build.id}")
   end
 
   private

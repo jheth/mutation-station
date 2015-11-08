@@ -22,6 +22,7 @@ class RepositoriesController < ApplicationController
 
     @spec_list = @repo.class_list
     @spec_list_tag_str = @spec_list.join(',')
+    add_breadcrumb(@repo.name)
   end
 
   def search

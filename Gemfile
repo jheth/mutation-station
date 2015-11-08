@@ -31,6 +31,7 @@ gem 'slim'
 gem 'pusher'
 gem 'kaminari'
 gem 'ransack'
+gem 'breadcrumbs_on_rails'
 
 group :production do
   gem 'rails_12factor'
