@@ -1,7 +1,7 @@
 require 'open3'
 
 class BuildRunner
-  def perform(build_id: nil, filter: filter, branch: 'master', fail_fast: false)
+  def perform(build_id: nil, filter: '', branch: 'master', fail_fast: false)
     @build = Build.find(build_id)
     repository = @build.repository
     @build.update_attributes(status: Build::RUNNING)
