@@ -52,7 +52,7 @@ class Repository < ActiveRecord::Base
       Dir.chdir(cwd) do
         self.update_column(:clone_status, IN_PROGRESS)
         send_clone_status('cloning', 'Cloning repository into...')
-        response = system("git clone #{clone_url} .")
+        response = system("git clone --depth 1 #{clone_url} .")
 
         if response
           self.update_column(:clone_status, COMPLETE)
@@ -86,7 +86,7 @@ class Repository < ActiveRecord::Base
   end
 
   def class_list
-    self.class.convert_files_to_class_list(spec_list)
+    convert_files_to_class_list(spec_list)
   end
 
   def set_github_details
@@ -120,13 +120,40 @@ class Repository < ActiveRecord::Base
     end
   end
 
-  def self.convert_files_to_class_list(file_list)
+  def namespace
+    unless @namespace
+      gemspec_file = Dir.glob(File.join(working_directory, "*.gemspec")).first
+      @namespace = ''
+
+      if gemspec_file
+        contents = File.read(gemspec_file)
+        if contents =~ /version\s*=\s*(\w+)::VERSION/
+          @namespace = $1
+        else
+          # try gemspec filename
+          @namespace = File.basename(gemspec_file).gsub('.gemspec', '')
+        end
+      end
+    end
+    @namespace
+  end
+
+  def convert_files_to_class_list(file_list)
     class_name_list = []
     if file_list.is_a?(Array)
       class_name_list = file_list.map do |s|
-        matches = s.match(%r{spec\/(?:lib|unit)\/([\w\/]*)_spec.rb})
+        matches = s.match(%r{spec\/(?:lib\/|unit\/)?([\w\/]*)_spec.rb})
         if matches.present?
-          matches[1].split('/').map(&:camelize).join('::')
+          tokens = matches[1].split('/')
+          if namespace.present? && tokens.first != namespace
+            # Watch out for case sensitivity issues.
+            if tokens.first.downcase == namespace.downcase
+              tokens[0] = namespace
+            else
+              tokens.unshift(namespace)
+            end
+          end
+          tokens.map(&:camelize).join('::')
         end
       end.compact
     end

@@ -3,14 +3,14 @@ require 'open3'
 class BuildRunner
   def perform(build_id: nil, filter: '', branch: 'master', fail_fast: false)
     @build = Build.find(build_id)
-    repository = @build.repository
+    @repository = @build.repository
     @build.update_attributes(status: Build::RUNNING)
 
     @build.send_progress_status(status: Build::RUNNING, message: 'Build Started...')
 
     # Make sure we have the repo
-    working_dir = repository.working_directory
-    Dir.chdir(working_dir)
+    @working_dir = @repository.working_directory.to_s
+    Dir.chdir(@working_dir)
 
     @build.send_progress_status(message: 'Pulling latest changes from github.')
 
@@ -23,24 +23,25 @@ class BuildRunner
     result_json = "#{current_sha}.json"
     stdout_file = "#{current_sha}.txt"
 
-    gemfile = File.join(working_dir, 'Gemfile')
-    unless system('grep -q mutant-rspec Gemfile')
-      File.open(gemfile, 'a') do |f|
-        # Write a line in case there is something on the last line in
-        # the Gemfile
-        f.write("\n" + mutant_gem)
-      end
-    end
-
     build_status = Build::COMPLETE
     mutant_json = nil
     stdout_text = nil
+
+    gemfile = File.join(@working_dir, 'Gemfile')
 
     Bundler.with_clean_env do
       ENV['BUNDLE_GEMFILE'] = gemfile
       ENV['BUNDLE_FROZEN'] = '0'
       @build.send_progress_status(message: 'Running bundle install...')
       if bundle_install
+        # Set Up Mutant Testing
+        unless system('grep -q mutant-rspec Gemfile')
+          File.open(gemfile, 'a') do |f|
+            f.write("\n" + mutant_gem)
+          end
+          bundle_install(filter: 'mutant')
+        end
+
         @build.send_progress_status(message: 'Running Mutant Tests...')
         run_mutant(filter: filter, json_out: result_json, stdout: stdout_file, fail_fast: fail_fast)
 
@@ -85,7 +86,7 @@ class BuildRunner
   end
 
   def build_log
-    @logfile ||= "#{head_sha}_#{Time.now.to_s(:db).gsub(' ', '_')}.txt"
+    @logfile ||= "#{head_sha}_#{Time.now.to_i}.txt"
   end
 
   def log(message)
@@ -96,8 +97,10 @@ class BuildRunner
     @logger.write(message + "\n")
   end
 
-  def bundle_install
+  def bundle_install(filter: nil)
     cmd = %(bundle install --path=vendor)
+    cmd << %(| grep #{filter}) if filter
+
     log(cmd)
     stdout_str, stderr_str, status = Open3.capture3(cmd)
     log(stdout_str)
@@ -135,7 +138,34 @@ class BuildRunner
   end
 
   def rspec3?
-    true
+    version = `bundle show rspec-core`
+    if version =~ /rspec-core-([\d\.]+)/
+      return $1.to_f >= 3.0
+    else
+      true
+    end
+  end
+
+  def require_file
+    namespace = @repository.namespace
+    lib_file = nil
+
+    if namespace.present?
+      project_file = File.join(@working_dir, 'lib', "#{namespace.underscore}.rb")
+
+      unless File.exist?(project_file)
+        project_file = Dir.glob(File.join(@working_dir, 'lib', "*.rb")).first
+      end
+      if project_file
+        project_file = File.basename(project_file)
+        log("Found project file #{project_file}")
+        lib_file = project_file.gsub('.rb', '')
+      end
+    else
+      log('No gem namespace found')
+    end
+
+    lib_file
   end
 
   def mutant_gem
@@ -147,7 +177,10 @@ class BuildRunner
     # %(RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec User)
     cmd = ["bundle exec mutant"]
     cmd << ["--include lib/"]
-    #cmd << ["--require dynamics_crm"] unless rspec3?
+    if rfile = require_file
+      cmd << ["--require #{rfile}"]
+    end
+
     cmd << ["--fail-fast"] if fail_fast
     cmd << %(--json-dump #{json_out})
     cmd << %(--use rspec #{filter.join(' ')})
