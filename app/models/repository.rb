@@ -2,7 +2,7 @@ class Repository < ActiveRecord::Base
   belongs_to :user
   has_many :builds, dependent: :destroy
 
-  validates :name, :clone_url, presence: true
+  validates :name, :clone_url, presence: true, uniqueness: true
 
   def github_repo
     id = ENV.fetch('GITHUB_CLIENT_ID')

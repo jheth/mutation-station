@@ -1,4 +1,7 @@
 class RepositoriesController < ApplicationController
+  before_filter :redirect_to_existing_repository, only: :create
+  before_filter :load_repository, only: [:show, :destroy]
+
   def create
     @repository = current_user.repositories.new(repository_params)
     @repository.set_github_details
@@ -9,7 +12,7 @@ class RepositoriesController < ApplicationController
       flash[:error] = "#{@repository.errors.full_messages}"
     end
 
-    redirect_to root_path
+    redirect_to [@repository.user, @repository]
   end
 
   def show
@@ -28,7 +31,26 @@ class RepositoriesController < ApplicationController
     render json: client.search_repositories(params[:term]).items.map(&:full_name)
   end
 
+  def destroy
+    if @repository.destroy
+      flash[:notice] = "We've deleted #{@repository.name}"
+      redirect_to root_path
+    else
+      flash[:error] = "Aw snap! We couldn't delete that repo."
+      redirect_to @repository
+    end
+  end
+
   private
+
+  def redirect_to_existing_repository
+    repository = Repository.find_by_name(params[:repository][:name])
+    redirect_to [repository.user, repository] if repository
+  end
+
+  def load_repository
+    @repository = Repository.find(params[:id])
+  end
 
   def repository_params
     params.require(:repository).permit(:name)
