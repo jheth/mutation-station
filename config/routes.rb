@@ -21,9 +21,4 @@ Rails.application.routes.draw do
   resources :repositories, only: [] do
     resources :builds
   end
-
-  authenticated :user do
-    # root for authenticated users goes here.
-    # root 'some_controller#some_page', as: :authenticated_user
-  end
 end
