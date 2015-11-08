@@ -88,8 +88,8 @@ javascript:
   $(document).ready(function() {
     $('.editor').each(function( index ) {
       editor = ace.edit(this);
-      editor.setTheme("ace/theme/ambiance");
-      editor.getSession().setMode("ace/mode/ruby");
+      editor.setTheme("ace/theme/github");
+      editor.getSession().setMode("ace/mode/diff");
       editor.setReadOnly(true);
     });
   });
