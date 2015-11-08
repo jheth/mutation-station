@@ -154,8 +154,8 @@ class BuildRunner
       if $1.to_f >= 3.3
         raise ArgumentError.new("Unsupported RSpec Version (#{$1}). RSpec 3.2 is the highest version supported.")
       end
-
-      return $1.to_f >= 3.2
+      log(version)
+      return $1.to_f >= 3.0
     else
       true
     end
